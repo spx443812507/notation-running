@@ -1,22 +1,25 @@
 $(function() {
-    var $el = $('#pdf'),
-        scale = $el.innerWidth() / 2479,
+    var $container = $('.g-container'),
+        scale = $container.innerWidth() / 2479,
         $audio = $('#audio'),
         notation = new Notation({
-            sections: sections,
-            notes: notes,
-            times: times
-        }, {
-            el: $el,
-            scale: scale
+            scale: scale,
+            speed: 1
         });
 
-    $el.height(3508 * scale);
+    $container.width($(window).width());
+
     ko.applyBindings(notation);
 
-    $audio.on('timeupdate', function() {
-        console.log($audio[0].currentTime);
+    notation.init({
+        sections: sections,
+        notes: notes,
+        times: times
     });
 
-    notation.goToNext();
+    $('.page').height(3508 * scale);
+
+    $audio.on('timeupdate', function() {
+        notation.currentTime($audio[0].currentTime);
+    });
 });

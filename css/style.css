@@ -1,9 +1,7 @@
 .g-container {
-    width: 960px;
     height: 100%;
     margin: 0 auto;
     position: relative;
-    padding: 0 15px;
     overflow: hidden;
 }
 
@@ -15,6 +13,10 @@
 .pdf {
     position: relative;
     width: 100%;
+}
+
+.page {
+    position: relative;
 }
 
 .section, .note, .cursor-note {
@@ -37,6 +39,6 @@
 .cursor-note {
     width: 2px;
     height: 100%;
-    color: #EE5757;
+    background-color: #EE5757;
     z-index: 1;
 }

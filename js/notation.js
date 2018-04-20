@@ -15,7 +15,7 @@ var Note = (function() {
 
     Note.prototype.init = function(note) {
         var self = this;
-        console.log(note);
+
         self.id(note.id);
         self.page(note.page);
         self.width(note.width + 'px');
@@ -68,24 +68,26 @@ var Section = (function() {
 }());
 
 var Notation = (function() {
-    function Notation(data, options) {
+    function Notation(options) {
         var self = this,
             defaultOptions = {
                 scale: 1
             };
 
         self.options = $.extend({}, defaultOptions, options);
-        self.sections = ko.observableArray();
-        self.notes = ko.observableArray();
-        self.times = ko.observableArray();
+
+        //整理后的音节信息
+        self.notes = [];
         //当前播放的小节
-        self.currentSectionId = ko.observable(0);
+        self.currentSectionId = ko.observable(1);
         //当前时间
         self.currentTime = ko.observable(0);
+        //播放速度
+        self.speed = ko.observable(1);
         //是否显示小节滑块
         self.showSectionCursor = ko.observable(false);
         //是否显示音符光标
-        self.showNoteCursor = ko.observable(false);
+        self.showNoteCursor = ko.observable(true);
         //乐谱页
         self.pages = ko.observableArray();
         //当前页面页码
@@ -105,15 +107,6 @@ var Notation = (function() {
                 self.pageIndex(pageCount - 1 > 0 ? pageCount - 1 : 0);
             }
         }, self);
-
-        ko.computed(function() {
-            var currentTime = self.currentTime();
-
-        }, self);
-
-        if (data) {
-            self.init(data);
-        }
     }
 
     Notation.prototype.init = function(data) {
@@ -162,6 +155,8 @@ var Notation = (function() {
                 if (sections.hasOwnProperty(sectionKey)) {
                     sections[sectionKey].notes.push(note);
                 }
+
+                self.notes.push(note);
             });
         }
 
