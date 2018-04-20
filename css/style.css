@@ -1,44 +1,44 @@
 .g-container {
-    height: 100%;
-    margin: 0 auto;
-    position: relative;
-    overflow: hidden;
+  height: 100%;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
 }
 
 .g-header {
-    position: relative;
-    padding: 30px 0;
+  position: relative;
+  padding: 30px 0;
 }
 
 .pdf {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 
 .page {
-    position: relative;
+  position: relative;
 }
 
 .section, .note, .cursor-note {
-    position: absolute;
+  position: absolute;
 }
 
 .section {
-    background-color: #2b81af;
-    opacity: .2;
+  background-color: #2b81af;
+  opacity: .2;
 }
 
 .section.active {
-    background-color: #af7b7e;
+  background-color: #af7b7e;
 }
 
 .note {
-    background-color: #af0a0d;
+  background-color: #af0a0d;
 }
 
 .cursor-note {
-    width: 2px;
-    height: 100%;
-    background-color: #EE5757;
-    z-index: 1;
+  width: 2px;
+  height: 100%;
+  background-color: #EE5757;
+  z-index: 1;
 }

@@ -1,69 +1,69 @@
 <!doctype html>
 <html class="no-js" lang="">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="manifest" href="site.webmanifest">
-    <link rel="apple-touch-icon" href="icon.png">
-    <!-- Place favicon.ico in the root directory -->
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
 
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <!--[if lte IE 9]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
-    your browser</a> to improve your experience and security.</p>
+  your browser</a> to improve your experience and security.</p>
 <![endif]-->
 
 <!-- Add your site or application content here -->
 <div class="g-container">
-    <div class="g-header">
-        <div class="audio">
-            <audio id="audio" width="100%" controls>
-                <source src="data/tureck.mp3" type="audio/mp3">
-            </audio>
-        </div>
-        <div class="type">
-            <label for="typeBlock">
-                <input type="radio" name="type" id="typeBlock" class="toggleType" value="section"> 按小节走谱
-            </label>
-            <label for="typeNote">
-                <input type="radio" name="type" id="typeNote" class="toggleType" value="note"> 按音符走谱
-            </label>
-        </div>
-        <div class="speed">
-            <select name="" id="speed">
-                <option value="1">原速播放</option>
-                <option value="0.5">0.5速度播放</option>
-                <option value="0.8">0.8速度播放</option>
-            </select>
-        </div>
+  <div class="g-header">
+    <div class="audio">
+      <audio id="audio" width="100%" controls>
+        <source src="data/tureck.mp3" type="audio/mp3">
+      </audio>
     </div>
-    <div class="g-content">
-        <div class="pdf" id="pdf">
-            <!-- ko foreach: pages-->
-            <div class="page">
-                <!-- ko foreach: sections-->
-                <div class="section"
-                     data-bind="style: {width: width(), height: height(), left: left(), top: top()},
+    <div class="type">
+      <label for="typeBlock">
+        <input type="radio" name="type" id="typeBlock" class="toggleType" value="section"> 按小节走谱
+      </label>
+      <label for="typeNote">
+        <input type="radio" name="type" id="typeNote" class="toggleType" value="note"> 按音符走谱
+      </label>
+    </div>
+    <div class="speed">
+      <select name="" id="speed">
+        <option value="1">原速播放</option>
+        <option value="0.5">0.5速度播放</option>
+        <option value="0.8">0.8速度播放</option>
+      </select>
+    </div>
+  </div>
+  <div class="g-content">
+    <div class="pdf" id="pdf">
+      <!-- ko foreach: pages-->
+      <div class="page">
+        <!-- ko foreach: sections-->
+        <div class="section"
+             data-bind="style: {width: width(), height: height(), left: left(), top: top()},
                      css: {'active': id === $root.currentSectionId()}, click: $root.changeSection"></div>
-                <!-- ko foreach: notes-->
-                <div class="note" data-bind="style: {width: width(), height: height(), left: left(), top: top()}"></div>
-                <!-- /ko -->
-                <!-- /ko -->
-            </div>
-            <!-- /ko -->
+        <!-- ko foreach: notes-->
+        <div class="note" data-bind="style: {width: width(), height: height(), left: left(), top: top()}"></div>
+        <!-- /ko -->
+        <!-- /ko -->
+      </div>
+      <!-- /ko -->
 
-            <!-- ko component: {name: "notation-cursor", params: {cursor: cursor.cursor, isShow: showNoteCursor, notes: notes}} -->
-            <!-- /ko -->
-        </div>
+      <!-- ko component: {name: "notation-cursor", params: {cursor: cursor.cursor, isShow: showNoteCursor, notes: notes}} -->
+      <!-- /ko -->
     </div>
+  </div>
 </div>
 <script src="js/vendor/modernizr-3.5.0.min.js"></script>
 <script src="js/vendor/jquery.min.js"></script>
