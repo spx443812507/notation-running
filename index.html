@@ -47,21 +47,18 @@
   </div>
   <div class="g-content">
     <div class="pdf" id="pdf">
-      <!-- ko foreach: pages-->
-      <div class="page">
+      <div class="pages" data-bind="style: {height: pageHeight}">
         <!-- ko foreach: sections-->
         <div class="section"
              data-bind="style: {width: width(), height: height(), left: left(), top: top()},
-                     css: {'active': id === $root.currentSectionId()}, click: $root.changeSection"></div>
+                     css: {active: isActive()}, click: $root.changeSection"></div>
         <!-- ko foreach: notes-->
         <div class="note" data-bind="style: {width: width(), height: height(), left: left(), top: top()}"></div>
         <!-- /ko -->
         <!-- /ko -->
       </div>
-      <!-- /ko -->
 
-      <!-- ko component: {name: "notation-cursor", params: {cursor: cursor.cursor, isShow: showNoteCursor, notes: notes}} -->
-      <!-- /ko -->
+      <div class="cursor-note" data-bind="style: {}"></div>
     </div>
   </div>
 </div>
@@ -71,7 +68,6 @@
 <script src="node_modules/pdfjs-dist/build/pdf.min.js"></script>
 <script src="js/data.js"></script>
 <script src="js/notation.js"></script>
-<script src="js/plugins.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

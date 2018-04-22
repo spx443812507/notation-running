@@ -4,17 +4,36 @@
       var info = ko.unwrap(valueAccessor()),
         currentTime = info.currentTime,
         speed = info.speed,
-        notes = allBindings.get('notes'),
-        $element = $(element),
-        $animate;
+        sections = allBindings.get('sections')(),
+        $element = $(element);
 
-      console.log(currentTime);
-
-      $element.css({'left': notes[0].left + 'px', 'top': notes[0].top + 'px', 'height': notes[0].height + 'px'});
-
-      $.each(notes, function(i, note) {
-
+      $element.css({
+        'left': sections[0].left(),
+        'top': sections[0].top(),
+        'height': sections[0].height()
       });
+
+      function moveNext(indexSection, indexNote) {
+        var section = sections[indexSection],
+          notes = section.notes(),
+          note = notes[indexNote];
+
+        $element = $element.animate({
+          'left': note.left(),
+          'top': note.top(),
+          'height': note.height()
+        }, (note.time - currentTime) * 1000 * speed, function() {
+          currentTime = note.time;
+
+          if (notes[indexNote + 1]) {
+            moveNext(indexSection, indexNote + 1);
+          } else if (sections[indexSection + 1]) {
+            moveNext(indexSection + 1, 0);
+          }
+        });
+      }
+
+      moveNext(0, 0);
     }
   };
 
@@ -22,14 +41,14 @@
     var self = this;
 
     self.isShow = params.isShow;
-    self.notes = params.notes;
+    self.sections = params.sections;
     self.cursor = params.cursor;
   };
 
   ko.components.register('notation-cursor', {
     viewModel: CursorViewModel,
     template: '<!-- ko if: isShow -->' +
-    '<div class="cursor-note" data-bind="cursor: cursor, notes: notes"></div>' +
+    '<div class="cursor-note" data-bind="cursor: cursor, sections: sections"></div>' +
     '<!-- /ko -->'
   });
 

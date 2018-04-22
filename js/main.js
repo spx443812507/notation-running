@@ -1,15 +1,11 @@
 $(function() {
-  var $container = $('.g-container'),
-    scale = $container.innerWidth() / 2479,
-    $audio = $('#audio'),
+  var $audio = $('#audio'),
     notation = new Notation({
-      scale: scale,
-      speed: 1
+      scale: $('.g-container').innerWidth() / 2479,
+      speed: 1,
+      notationWidth: 2479,
+      notationHeight: 3508
     });
-
-  $container.width($(window).width());
-
-  ko.applyBindings(notation);
 
   notation.init({
     sections: sections,
@@ -17,7 +13,7 @@ $(function() {
     times: times
   });
 
-  $('.page').height(3508 * scale);
+  ko.applyBindings(notation);
 
   $audio.on('timeupdate', function() {
     notation.currentTime($audio[0].currentTime);
