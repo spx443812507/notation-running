@@ -4,16 +4,15 @@
       var info = ko.unwrap(valueAccessor()),
         currentTime = info.currentTime,
         speed = info.speed,
+        playing = info.playing,
         sections = allBindings.get('sections')(),
         $element = $(element),
         startSection,
         startNote;
 
-      $element.css({
-        'left': sections[0].left(),
-        'top': sections[0].top(),
-        'height': sections[0].height()
-      });
+      if (!playing) {
+        return $element.stop();
+      }
 
       $.each(sections, function(indexSection, section) {
         var notes = section.notes(),
@@ -90,13 +89,23 @@
 
     self.cursor = ko.observable({
       currentTime: 0,
-      speed: 1
+      speed: 1,
+      playing: false
     });
 
-    self.jump = function(currentTime, speed) {
+    self.start = function(currentTime, speed) {
       self.cursor({
         currentTime: currentTime,
-        speed: speed
+        speed: speed,
+        playing: true
+      });
+    };
+
+    self.stop = function(currentTime, speed) {
+      self.cursor({
+        currentTime: currentTime,
+        speed: speed,
+        playing: false
       });
     };
   };
