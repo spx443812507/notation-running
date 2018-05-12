@@ -26,7 +26,7 @@
   <div class="g-header">
     <div class="audio">
       <audio id="audio" width="100%" controls autoplay="autoplay">
-        <source src="data/tureck.mp3" type="audio/mp3">
+        <source type="audio/mp3">
       </audio>
     </div>
     <div class="type">
@@ -48,8 +48,8 @@
   <div class="g-content">
     <div class="pdf" id="pdf">
       <div class="pages" data-bind="style: {height: pageHeight}">
-        <!-- ko foreach: pages-->
-        <img alt="" data-bind="attr: {src: './data/img/' + $data + '.png'}">
+        <!-- ko foreach: images-->
+        <img alt="" data-bind="attr: {src: $data}">
         <!-- /ko -->
         <!-- ko foreach: sequences-->
         <div class="section"
@@ -67,8 +67,8 @@
 </div>
 <script src="js/vendor/modernizr-3.5.0.min.js"></script>
 <script src="js/vendor/jquery.min.js"></script>
+<script src="js/vendor/dynamics.min.js"></script>
 <script src="js/vendor/knockout.js"></script>
-<script src="js/data.js"></script>
 <script src="js/notation.js"></script>
 <script src="js/plugins.js"></script>
 <script src="js/main.js"></script>

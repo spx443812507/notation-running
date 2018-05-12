@@ -91,7 +91,11 @@ var Notation = (function() {
     //页面高度
     self.pageHeight = ko.observable(0);
     //乐谱页
-    self.pages = ko.observableArray();
+    self.images = ko.observableArray();
+    //音频地址
+    self.audioUrl = ko.observable();
+    //视频地址
+    self.videoUrl = ko.observable();
   }
 
   Notation.prototype.init = function(data) {
@@ -100,6 +104,18 @@ var Notation = (function() {
       notes = {},
       sequences = [],
       pageCount;
+
+    if (data.images) {
+      self.images(data.images);
+    }
+
+    if (data.audioUrl) {
+      self.audioUrl(data.audioUrl);
+    }
+
+    if (data.videoUrl) {
+      self.videoUrl(data.videoUrl);
+    }
 
     if (data && data.sections && data.sections.length) {
       $.each(data.sections, function(sectionIndex, sectionItem) {
@@ -125,10 +141,6 @@ var Notation = (function() {
       pageCount = data.sections[data.sections.length - 1][0][1];
       //根据页数设置页面高度
       self.pageHeight((self.options.notationHeight * pageCount) * self.options.scale + 'px');
-
-      for (var i = 0; i < pageCount; i++) {
-        self.pages.push(i + 1);
-      }
     }
 
     if (data && data.notes && data.notes.length) {

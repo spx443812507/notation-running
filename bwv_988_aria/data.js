@@ -1,3 +1,9 @@
+var images = [
+  './bwv_988_aria/img/1.png',
+  './bwv_988_aria/img/2.png'
+];
+var audioUrl = './bwv_988_aria/audio.mp3';
+var videoUrl = './bwv_988_aria/video.mp4';
 // [1（第一小节）, 1（PDF第一页）, {x: 270, y: 635, eX: 855, eY: 956}],
 var sections = [
   [[1, 1], {x: 303, y: 636, eX: 859, eY: 958}],			// [1����һС�ڣ�, 1��PDF��һҳ��, {x: 270, y: 635, eX: 855, eY: 956}],
