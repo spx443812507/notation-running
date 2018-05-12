@@ -36,15 +36,9 @@ $(function() {
 
   ko.applyBindings(notation);
 
-  $audio.on('play', function() {
-    window.cursor.start($audio[0].currentTime, 1);
-  });
-
-  $audio.on('pause', function() {
-    window.cursor.stop($audio[0].currentTime, 1);
-  });
-
   $audio.on('timeupdate', function() {
+    console.log($audio[0].currentTime);
     notation.currentTime($audio[0].currentTime);
+    window.cursor.set($audio[0].currentTime, 1);
   });
 });

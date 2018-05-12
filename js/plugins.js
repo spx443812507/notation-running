@@ -41,29 +41,15 @@
           notes = section.notes(),
           note = notes[indexNote];
 
-        console.log(note.time - currentTime);
-
         $element = $element.stop().animate({
           'left': note.left(),
           'top': note.top(),
           'height': note.height()
         }, (note.time - currentTime) * 1000 * speed - 1, 'linear', function() {
-          currentTime = note.time;
-
           if (notes[indexNote + 1]) {
             moveNext(indexSection, indexNote + 1);
-          } else {
-            $element = $element.stop().animate({
-              'left': parseFloat(section.left()) + parseFloat(section.width()) + 'px',
-              'top': section.top(),
-              'height': section.height()
-            }, (section.endTime - currentTime) * 1000 * speed, 'linear', function() {
-              currentTime = section.endTime;
-
-              if (sequences[indexSection + 1]) {
-                moveNext(indexSection + 1, 0);
-              }
-            });
+          } else if (sections[indexSection + 1]) {
+            moveNext(indexSection + 1, 0);
           }
         });
       }
@@ -94,19 +80,11 @@
       playing: false
     });
 
-    self.start = function(currentTime, speed) {
+    self.set = function(currentTime, speed) {
       self.cursor({
         currentTime: currentTime,
         speed: speed,
         playing: true
-      });
-    };
-
-    self.stop = function(currentTime, speed) {
-      self.cursor({
-        currentTime: currentTime,
-        speed: speed,
-        playing: false
       });
     };
   };
