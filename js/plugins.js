@@ -47,7 +47,7 @@
           'left': note.left(),
           'top': note.top(),
           'height': note.height()
-        }, (note.time - currentTime) * 1000 * speed, function() {
+        }, (note.time - currentTime) * 1000 * speed - 1, 'linear', function() {
           currentTime = note.time;
 
           if (notes[indexNote + 1]) {
@@ -57,7 +57,7 @@
               'left': parseFloat(section.left()) + parseFloat(section.width()) + 'px',
               'top': section.top(),
               'height': section.height()
-            }, (section.endTime - currentTime) * 1000 * speed, function() {
+            }, (section.endTime - currentTime) * 1000 * speed, 'linear', function() {
               currentTime = section.endTime;
 
               if (sequences[indexSection + 1]) {
