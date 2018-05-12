@@ -80,11 +80,11 @@
       playing: false
     });
 
-    self.set = function(currentTime, speed) {
+    self.set = function(playing, currentTime, speed) {
       self.cursor({
         currentTime: currentTime,
         speed: speed,
-        playing: true
+        playing: playing
       });
     };
   };
