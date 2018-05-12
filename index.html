@@ -25,7 +25,7 @@
 <div class="g-container">
   <div class="g-header">
     <div class="audio">
-      <audio id="audio" width="100%" controls>
+      <audio id="audio" width="100%" controls autoplay="autoplay">
         <source src="data/tureck.mp3" type="audio/mp3">
       </audio>
     </div>
@@ -48,17 +48,20 @@
   <div class="g-content">
     <div class="pdf" id="pdf">
       <div class="pages" data-bind="style: {height: pageHeight}">
+        <!-- ko foreach: pages-->
+        <img alt="" data-bind="attr: {src: './data/img/' + $data + '.png'}">
+        <!-- /ko -->
         <!-- ko foreach: sections-->
         <div class="section"
-             data-bind="style: {width: width(), height: height(), left: left(), top: top()},
+             data-bind="attr: {id: id}, style: {width: width(), height: height(), left: left(), top: top()},
                      css: {active: isActive()}, click: $root.changeSection"></div>
         <!-- ko foreach: notes-->
         <div class="note" data-bind="style: {width: width(), height: height(), left: left(), top: top()}"></div>
         <!-- /ko -->
         <!-- /ko -->
       </div>
-
-      <div class="cursor-note" data-bind="style: {}"></div>
+      <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, sections: sections, isShow: true}} -->
+      <!-- /ko -->
     </div>
   </div>
 </div>
@@ -68,6 +71,7 @@
 <script src="node_modules/pdfjs-dist/build/pdf.min.js"></script>
 <script src="js/data.js"></script>
 <script src="js/notation.js"></script>
+<script src="js/plugins.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

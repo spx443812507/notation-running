@@ -5,7 +5,9 @@
         currentTime = info.currentTime,
         speed = info.speed,
         sections = allBindings.get('sections')(),
-        $element = $(element);
+        $element = $(element),
+        startSection,
+        startNote;
 
       $element.css({
         'left': sections[0].left(),
@@ -13,11 +15,34 @@
         'height': sections[0].height()
       });
 
+      $.each(sections, function(indexSection, section) {
+        var notes = section.notes(),
+          found = false;
+
+        $.each(notes, function(indexNote, note) {
+          if (note.time > currentTime) {
+            startSection = indexSection;
+            startNote = indexNote;
+            found = true;
+            return false;
+          }
+        });
+
+        if (found) {
+          return false;
+        }
+      });
+
+      if (startSection !== undefined && startNote !== undefined) {
+        moveNext(startSection, startNote);
+      }
+
       function moveNext(indexSection, indexNote) {
         var section = sections[indexSection],
           notes = section.notes(),
           note = notes[indexNote];
 
+        console.log(note.time - currentTime);
         $element = $element.animate({
           'left': note.left(),
           'top': note.top(),
@@ -27,13 +52,21 @@
 
           if (notes[indexNote + 1]) {
             moveNext(indexSection, indexNote + 1);
-          } else if (sections[indexSection + 1]) {
-            moveNext(indexSection + 1, 0);
+          } else {
+            $element = $element.animate({
+              'left': parseFloat(section.left()) + parseFloat(section.width()) + 'px',
+              'top': section.top(),
+              'height': section.height()
+            }, (section.endTime - currentTime) * 1000 * speed, function() {
+              currentTime = section.endTime;
+
+              if (sections[indexSection + 1]) {
+                moveNext(indexSection + 1, 0);
+              }
+            });
           }
         });
       }
-
-      moveNext(0, 0);
     }
   };
 

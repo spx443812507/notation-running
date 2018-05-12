@@ -7,6 +7,7 @@ var Note = (function() {
     this.left = ko.observable();
     this.top = ko.observable();
     this.time = undefined;
+    this.duration = undefined;
 
     if (note) {
       this.init(note);
@@ -23,6 +24,7 @@ var Note = (function() {
     self.left(note.left + 'px');
     self.top(note.top + 'px');
     self.time = note.time;
+    self.duration = note.duration;
   };
 
   return Note;
@@ -78,7 +80,6 @@ var Notation = (function() {
       };
 
     self.options = $.extend({}, defaultOptions, options);
-
     //小节列表
     self.sections = ko.observableArray();
     //当前时间
@@ -91,6 +92,8 @@ var Notation = (function() {
     self.showNoteCursor = ko.observable(true);
     //页面高度
     self.pageHeight = ko.observable(0);
+    //乐谱页
+    self.pages = ko.observableArray();
   }
 
   Notation.prototype.init = function(data) {
@@ -118,8 +121,14 @@ var Notation = (function() {
         };
       });
 
+      //获取乐谱页数
       pageCount = data.sections[data.sections.length - 1][0][1];
+      //根据页数设置页面高度
       self.pageHeight((self.options.notationHeight * pageCount) * self.options.scale + 'px');
+
+      for (var i = 0; i < pageCount; i++) {
+        self.pages.push(i + 1);
+      }
     }
 
     if (data && data.notes && data.notes.length) {
@@ -140,6 +149,10 @@ var Notation = (function() {
             time: data.times[noteIndex][0]
           };
 
+        if (data.times[noteIndex + 1]) {
+          note.duration = data.times[noteIndex + 1][0] - note.time;
+        }
+
         if (sections.hasOwnProperty(sectionKey)) {
           sections[sectionKey].notes.push(note);
         }
@@ -151,35 +164,36 @@ var Notation = (function() {
         return;
       }
 
-      var section = new Section(sections[sectionKey]),
-        nextSectionKey = 'section' + (section.id + 1);
+      var currentSection = sections[sectionKey],
+        nextSection = sections['section' + (currentSection.id + 1)];
 
       //将第一个音符的时间设置为小节起始时间
-      if (sections[sectionKey].notes && sections[sectionKey].notes.length) {
-        section.startTime = sections[sectionKey].notes[0].time;
+      if (currentSection.notes && currentSection.notes.length) {
+        currentSection.startTime = currentSection.notes[0].time;
       }
 
       // 如果后面有小节，取后面小节的第一个音符事件为本小节的结束时间，否则取'end'时间
-      if (sections[nextSectionKey]) {
-        if (sections[nextSectionKey].notes && sections[nextSectionKey].notes.length) {
-          section.endTime = sections[nextSectionKey].notes[0].time;
+      if (nextSection) {
+        if (nextSection.notes && nextSection.notes.length) {
+          currentSection.endTime = nextSection.notes[0].time;
         }
       } else {
         var endingTime = times[times.length - 1];
 
-        section.notes.push(new Note({
+        currentSection.notes.push({
           id: endingTime[1],
           time: endingTime[0],
-          page: section.page,
+          page: currentSection.page,
           width: 2,
-          top: section.top(),
-          left: (parseFloat(section.left()) + parseFloat(section.width())) + 'px',
-          height: section.height()
-        }));
-        section.endTime = endingTime[0];
+          top: currentSection.top,
+          left: currentSection.left + currentSection.width,
+          height: currentSection.height
+        });
+
+        currentSection.endTime = endingTime[0];
       }
 
-      self.sections.push(section);
+      self.sections.push(new Section(currentSection));
     }
 
     ko.computed(function() {
@@ -197,7 +211,7 @@ var Notation = (function() {
   };
 
   Notation.prototype.changeSection = function(section) {
-
+    debugger;
   };
 
   return Notation;
