@@ -211,7 +211,6 @@ var Notation = (function() {
   };
 
   Notation.prototype.changeSection = function(section) {
-    debugger;
   };
 
   return Notation;
