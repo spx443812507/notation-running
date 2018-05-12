@@ -5,7 +5,7 @@
         currentTime = info.currentTime,
         speed = info.speed,
         playing = info.playing,
-        sections = allBindings.get('sections')(),
+        sequences = allBindings.get('sequences')(),
         $element = $(element),
         startSection,
         startNote;
@@ -14,7 +14,7 @@
         return $element.stop();
       }
 
-      $.each(sections, function(indexSection, section) {
+      $.each(sequences, function(indexSection, section) {
         var notes = section.notes(),
           found = false;
 
@@ -37,12 +37,13 @@
       }
 
       function moveNext(indexSection, indexNote) {
-        var section = sections[indexSection],
+        var section = sequences[indexSection],
           notes = section.notes(),
           note = notes[indexNote];
 
         console.log(note.time - currentTime);
-        $element = $element.animate({
+
+        $element = $element.stop().animate({
           'left': note.left(),
           'top': note.top(),
           'height': note.height()
@@ -52,14 +53,14 @@
           if (notes[indexNote + 1]) {
             moveNext(indexSection, indexNote + 1);
           } else {
-            $element = $element.animate({
+            $element = $element.stop().animate({
               'left': parseFloat(section.left()) + parseFloat(section.width()) + 'px',
               'top': section.top(),
               'height': section.height()
             }, (section.endTime - currentTime) * 1000 * speed, function() {
               currentTime = section.endTime;
 
-              if (sections[indexSection + 1]) {
+              if (sequences[indexSection + 1]) {
                 moveNext(indexSection + 1, 0);
               }
             });
@@ -73,14 +74,14 @@
     var self = this;
 
     self.isShow = params.isShow;
-    self.sections = params.sections;
+    self.sequences = params.sequences;
     self.cursor = params.cursor;
   };
 
   ko.components.register('notation-cursor', {
     viewModel: CursorViewModel,
     template: '<!-- ko if: isShow -->' +
-    '<div class="cursor-note" data-bind="cursor: cursor, sections: sections"></div>' +
+    '<div class="cursor-note" data-bind="cursor: cursor, sequences: sequences"></div>' +
     '<!-- /ko -->'
   });
 

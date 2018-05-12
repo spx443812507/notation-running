@@ -51,7 +51,7 @@
         <!-- ko foreach: pages-->
         <img alt="" data-bind="attr: {src: './data/img/' + $data + '.png'}">
         <!-- /ko -->
-        <!-- ko foreach: sections-->
+        <!-- ko foreach: sequences-->
         <div class="section"
              data-bind="attr: {id: id}, style: {width: width(), height: height(), left: left(), top: top()},
                      css: {active: isActive()}, click: $root.changeSection"></div>
@@ -60,7 +60,7 @@
         <!-- /ko -->
         <!-- /ko -->
       </div>
-      <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, sections: sections, isShow: true}} -->
+      <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, sequences: sequences, isShow: true}} -->
       <!-- /ko -->
     </div>
   </div>

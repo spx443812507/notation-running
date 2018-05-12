@@ -7,7 +7,6 @@ var Note = (function() {
     this.left = ko.observable();
     this.top = ko.observable();
     this.time = undefined;
-    this.duration = undefined;
 
     if (note) {
       this.init(note);
@@ -24,7 +23,6 @@ var Note = (function() {
     self.left(note.left + 'px');
     self.top(note.top + 'px');
     self.time = note.time;
-    self.duration = note.duration;
   };
 
   return Note;
@@ -81,7 +79,7 @@ var Notation = (function() {
 
     self.options = $.extend({}, defaultOptions, options);
     //小节列表
-    self.sections = ko.observableArray();
+    self.sequences = ko.observableArray();
     //当前时间
     self.currentTime = ko.observable(0);
     //播放速度
@@ -99,6 +97,8 @@ var Notation = (function() {
   Notation.prototype.init = function(data) {
     var self = this,
       sections = {},
+      notes = {},
+      sequences = [],
       pageCount;
 
     if (data && data.sections && data.sections.length) {
@@ -133,74 +133,85 @@ var Notation = (function() {
 
     if (data && data.notes && data.notes.length) {
       $.each(data.notes, function(noteIndex, noteItem) {
-        var sectionKey = 'section' + noteItem[0][0].toString().split('.')[0],
+        var sectionId = parseInt(noteItem[0][0].toString().split('.')[0]),
+          sectionKey = 'section' + sectionId,
           height = (noteItem[1].eY - noteItem[1].y) * self.options.scale,
           left = noteItem[1].x * self.options.scale,
           id = noteItem[0][0],
           page = noteItem[0][1],
-          top = (noteItem[1].y + ((page - 1) * self.options.notationHeight)) * self.options.scale,
-          note = {
-            id: id,
-            page: page,
-            width: 2,
-            height: height,
-            left: left,
-            top: top,
-            time: data.times[noteIndex][0]
-          };
+          top = (noteItem[1].y + ((page - 1) * self.options.notationHeight)) * self.options.scale;
 
-        if (data.times[noteIndex + 1]) {
-          note.duration = data.times[noteIndex + 1][0] - note.time;
+        notes['note' + id] = {
+          id: id,
+          page: page,
+          width: 2,
+          height: height,
+          left: left,
+          top: top,
+          sectionId: sectionId,
+          sectionKey: sectionKey
+        };
+      });
+    }
+
+    if (data && data.times && data.times.length) {
+      var section;
+
+      $.each(data.times, function(timeIndex, timeItem) {
+        if (timeItem[1] === 'end') {
+          return;
         }
 
-        if (sections.hasOwnProperty(sectionKey)) {
-          sections[sectionKey].notes.push(note);
+        var note = $.extend(true, {}, notes['note' + timeItem[1]], {time: timeItem[0]});
+
+        if (section && section.id === note.sectionId) {
+          section.notes.push(note);
+        } else {
+          section = $.extend(true, {}, sections[note.sectionKey], {
+            notes: [note]
+          });
+          sequences.push(section);
         }
       });
     }
 
-    for (var sectionKey in sections) {
-      if (!sections.hasOwnProperty(sectionKey)) {
-        return;
-      }
-
-      var currentSection = sections[sectionKey],
-        nextSection = sections['section' + (currentSection.id + 1)];
+    $.each(sequences, function(index, section) {
+      var nextSection = sequences[index + 1];
 
       //将第一个音符的时间设置为小节起始时间
-      if (currentSection.notes && currentSection.notes.length) {
-        currentSection.startTime = currentSection.notes[0].time;
+      if (section.notes && section.notes.length) {
+        section.startTime = section.notes[0].time;
       }
 
       // 如果后面有小节，取后面小节的第一个音符事件为本小节的结束时间，否则取'end'时间
       if (nextSection) {
         if (nextSection.notes && nextSection.notes.length) {
-          currentSection.endTime = nextSection.notes[0].time;
+          section.endTime = nextSection.notes[0].time;
         }
       } else {
         var endingTime = times[times.length - 1];
 
-        currentSection.notes.push({
+        section.notes.push({
           id: endingTime[1],
           time: endingTime[0],
-          page: currentSection.page,
+          page: section.page,
           width: 2,
-          top: currentSection.top,
-          left: currentSection.left + currentSection.width,
-          height: currentSection.height
+          top: section.top,
+          left: section.left + section.width,
+          height: section.height
         });
 
-        currentSection.endTime = endingTime[0];
+        section.endTime = endingTime[0];
       }
 
-      self.sections.push(new Section(currentSection));
-    }
+      self.sequences.push(new Section(section));
+    });
 
     ko.computed(function() {
       var currentTime = self.currentTime(),
-        sections = self.sections();
+        sequences = self.sequences();
 
-      $.each(sections, function(i, section) {
+      $.each(sequences, function(i, section) {
         section.isActive(false);
 
         if (section.startTime < currentTime && section.endTime > currentTime) {
