@@ -47,7 +47,6 @@ $(function() {
   });
 
   $audio.on('timeupdate', function () {
-    console.log($audio[0].currentTime);
     notation.currentTime($audio[0].currentTime);
     window.cursor.set(true, $audio[0].currentTime, 1);
   });

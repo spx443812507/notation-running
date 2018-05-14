@@ -7,49 +7,49 @@
         playing = info.playing,
         sequences = allBindings.get('sequences')(),
         $element = $(element),
-        startSection,
-        startNote;
+        notes = [],
+        noteIndex;
 
       if (!playing) {
         return $element.stop();
       }
 
       $.each(sequences, function(indexSection, section) {
-        var notes = section.notes(),
-          found = false;
+        notes = notes.concat(section.notes());
+      });
 
-        $.each(notes, function(indexNote, note) {
-          if (note.time > currentTime) {
-            startSection = indexSection;
-            startNote = indexNote;
-            found = true;
-            return false;
-          }
-        });
-
-        if (found) {
+      $.each(notes, function(index, note) {
+        if (note.time > currentTime) {
+          noteIndex = index;
           return false;
         }
       });
 
-      if (startSection !== undefined && startNote !== undefined) {
-        moveNext(startSection, startNote);
+      if (noteIndex !== undefined) {
+        moveNext(noteIndex);
       }
 
-      function moveNext(indexSection, indexNote) {
-        var section = sequences[indexSection],
-          notes = section.notes(),
-          note = notes[indexNote];
+      function moveNext(noteIndex) {
+        var note = notes[noteIndex],
+          nextNote;
 
         $element = $element.stop().animate({
           'left': note.left(),
           'top': note.top(),
           'height': note.height()
         }, (note.time - currentTime) * 1000 * speed - 1, 'linear', function() {
-          if (notes[indexNote + 1]) {
-            moveNext(indexSection, indexNote + 1);
-          } else if (sections[indexSection + 1]) {
-            moveNext(indexSection + 1, 0);
+          if (notes[noteIndex + 1]) {
+            nextNote = notes[noteIndex + 1];
+
+            if (note.top() !== nextNote.top()) {
+              $element.css({
+                left: nextNote.left(),
+                height: nextNote.height(),
+                top: nextNote.top()
+              });
+            }
+
+            moveNext(noteIndex + 1);
           }
         });
       }

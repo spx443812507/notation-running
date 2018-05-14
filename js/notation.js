@@ -1,6 +1,7 @@
 var Note = (function() {
   function Note(note) {
-    this.id = ko.observable();
+    this.sectionId = undefined;
+    this.id = undefined;
     this.page = ko.observable();
     this.width = ko.observable();
     this.height = ko.observable();
@@ -16,7 +17,8 @@ var Note = (function() {
   Note.prototype.init = function(note) {
     var self = this;
 
-    self.id(note.id);
+    self.sectionId = note.sectionId;
+    self.id = note.id;
     self.page(note.page);
     self.width(note.width + 'px');
     self.height(note.height + 'px');
@@ -176,46 +178,46 @@ var Notation = (function() {
 
         var note = $.extend(true, {}, notes['note' + timeItem[1]], {time: timeItem[0]});
 
-        if (section && section.id === note.sectionId) {
+        if (!section) {
+          section = $.extend(true, {}, sections[note.sectionKey], {
+            notes: [note],
+            startTime: 0
+          });
+          sequences.push(section);
+          return;
+        }
+
+        if (section.id === note.sectionId) {
           section.notes.push(note);
         } else {
+          var preSectionLastNote = section.notes[section.notes.length - 1];
+
+          if (preSectionLastNote.top !== note.top) {
+            section.notes.push({
+              id: 'endLine_' + section.id,
+              page: section.page,
+              width: 2,
+              height: section.height,
+              left: section.left + section.width,
+              top: section.top,
+              sectionId: section.id,
+              time: note.time
+            });
+          }
+
+          section.endTime = note.time;
+
           section = $.extend(true, {}, sections[note.sectionKey], {
-            notes: [note]
+            notes: [note],
+            startTime: note.time
           });
+
           sequences.push(section);
         }
       });
     }
 
     $.each(sequences, function(index, section) {
-      var nextSection = sequences[index + 1];
-
-      //将第一个音符的时间设置为小节起始时间
-      if (section.notes && section.notes.length) {
-        section.startTime = section.notes[0].time;
-      }
-
-      // 如果后面有小节，取后面小节的第一个音符事件为本小节的结束时间，否则取'end'时间
-      if (nextSection) {
-        if (nextSection.notes && nextSection.notes.length) {
-          section.endTime = nextSection.notes[0].time;
-        }
-      } else {
-        var endingTime = times[times.length - 1];
-
-        section.notes.push({
-          id: endingTime[1],
-          time: endingTime[0],
-          page: section.page,
-          width: 2,
-          top: section.top,
-          left: section.left + section.width,
-          height: section.height
-        });
-
-        section.endTime = endingTime[0];
-      }
-
       self.sequences.push(new Section(section));
     });
 

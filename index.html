@@ -56,7 +56,8 @@
              data-bind="attr: {id: id}, style: {width: width(), height: height(), left: left(), top: top()},
                      css: {active: isActive()}, click: $root.changeSection"></div>
         <!-- ko foreach: notes-->
-        <div class="note" data-bind="style: {width: width(), height: height(), left: left(), top: top()}"></div>
+        <div class="note"
+             data-bind="attr: {id: id}, style: {width: width(), height: height(), left: left(), top: top()}"></div>
         <!-- /ko -->
         <!-- /ko -->
       </div>
