@@ -173,7 +173,16 @@ var Notation = (function() {
 
       $.each(data.times, function(timeIndex, timeItem) {
         if (timeItem[1] === 'end') {
-          return;
+          return section.notes.push({
+            id: 'end',
+            page: section.page,
+            width: 2,
+            height: section.height,
+            left: section.left + section.width,
+            top: section.top,
+            sectionId: section.id,
+            time: timeItem[0]
+          });
         }
 
         var note = $.extend(true, {}, notes['note' + timeItem[1]], {time: timeItem[0]});

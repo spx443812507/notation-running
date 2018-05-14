@@ -36,18 +36,20 @@ $(function() {
 
   ko.applyBindings(notation);
 
-  $audio.on('play', function () {
+  $audio.on('play', function() {
     notation.currentTime($audio[0].currentTime);
     window.cursor.set(true, $audio[0].currentTime, 1);
   });
 
   $audio.on('pause', function audioEvent() {
-    notation.currentTime($audio[0].currentTime);
-    window.cursor.set(false, $audio[0].currentTime, 1);
+    notation.currentTime(false, $audio[0].currentTime);
   });
 
-  $audio.on('timeupdate', function () {
+  $audio.on('timeupdate', function() {
     notation.currentTime($audio[0].currentTime);
-    window.cursor.set(true, $audio[0].currentTime, 1);
   });
+
+  window.setInterval(function() {
+    window.cursor.set(true, $audio[0].currentTime, 1);
+  }, 1000);
 });

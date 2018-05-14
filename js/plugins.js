@@ -38,6 +38,8 @@
           'top': note.top(),
           'height': note.height()
         }, (note.time - currentTime) * 1000 * speed - 1, 'linear', function() {
+          currentTime = note.time;
+
           if (notes[noteIndex + 1]) {
             nextNote = notes[noteIndex + 1];
 
