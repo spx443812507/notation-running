@@ -173,6 +173,8 @@ var Notation = (function() {
 
       $.each(data.times, function(timeIndex, timeItem) {
         if (timeItem[1] === 'end') {
+          section.endTime = timeItem[0];
+
           return section.notes.push({
             id: 'end',
             page: section.page,
