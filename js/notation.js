@@ -74,14 +74,16 @@ var Notation = (function() {
   function Notation(options) {
     var self = this,
       defaultOptions = {
-        scale: 1,
-        notationWidth: 100,
-        notationHeight: 100
+        scale: 1
       };
 
     self.options = $.extend({}, defaultOptions, options);
-    //小节列表
-    self.sequences = ko.observableArray();
+    //乐谱标题
+    self.title = ko.observable(self.options.title);
+    //音符列表
+    self.notes = ko.observableArray();
+    //乐谱页
+    self.pages = ko.observableArray();
     //当前时间
     self.currentTime = ko.observable(0);
     //播放速度
@@ -90,43 +92,26 @@ var Notation = (function() {
     self.showSectionCursor = ko.observable(false);
     //是否显示音符光标
     self.showNoteCursor = ko.observable(true);
-    //页面高度
-    self.pageHeight = ko.observable(0);
-    //乐谱页
-    self.images = ko.observableArray();
-    //音频地址
-    self.audioUrl = ko.observable();
-    //视频地址
-    self.videoUrl = ko.observable();
+    //初始化
+    self.init();
   }
 
-  Notation.prototype.init = function(data) {
+  Notation.prototype.init = function() {
     var self = this,
-      sections = {},
-      notes = {},
+      sections = self.options.sections,
+      notes = self.options.notes,
+      times = self.options.times,
       sequences = [],
-      pageCount;
+      pages = [];
 
-    if (data.images) {
-      self.images(data.images);
-    }
-
-    if (data.audioUrl) {
-      self.audioUrl(data.audioUrl);
-    }
-
-    if (data.videoUrl) {
-      self.videoUrl(data.videoUrl);
-    }
-
-    if (data && data.sections && data.sections.length) {
-      $.each(data.sections, function(sectionIndex, sectionItem) {
+    if (sections && sections.length) {
+      $.each(sections, function(sectionIndex, sectionItem) {
         var width = (sectionItem[1].eX - sectionItem[1].x) * self.options.scale,
           height = (sectionItem[1].eY - sectionItem[1].y) * self.options.scale,
           left = sectionItem[1].x * self.options.scale,
           id = sectionItem[0][0],
           page = sectionItem[0][1],
-          top = (sectionItem[1].y + ((page - 1) * self.options.notationHeight)) * self.options.scale;
+          top = (sectionItem[1].y + ((page - 1) * self.options.height)) * self.options.scale;
 
         sections['section' + id] = {
           id: id,
@@ -138,22 +123,17 @@ var Notation = (function() {
           notes: []
         };
       });
-
-      //获取乐谱页数
-      pageCount = data.sections[data.sections.length - 1][0][1];
-      //根据页数设置页面高度
-      self.pageHeight((self.options.notationHeight * pageCount) * self.options.scale + 'px');
     }
 
-    if (data && data.notes && data.notes.length) {
-      $.each(data.notes, function(noteIndex, noteItem) {
+    if (notes && notes.length) {
+      $.each(notes, function(noteIndex, noteItem) {
         var sectionId = parseInt(noteItem[0][0].toString().split('.')[0]),
           sectionKey = 'section' + sectionId,
           height = (noteItem[1].eY - noteItem[1].y) * self.options.scale,
           left = noteItem[1].x * self.options.scale,
           id = noteItem[0][0],
           page = noteItem[0][1],
-          top = (noteItem[1].y + ((page - 1) * self.options.notationHeight)) * self.options.scale;
+          top = (noteItem[1].y + ((page - 1) * self.options.height)) * self.options.scale;
 
         notes['note' + id] = {
           id: id,
@@ -168,10 +148,10 @@ var Notation = (function() {
       });
     }
 
-    if (data && data.times && data.times.length) {
+    if (times && times.length) {
       var section;
 
-      $.each(data.times, function(timeIndex, timeItem) {
+      $.each(times, function(timeIndex, timeItem) {
         if (timeItem[1] === 'end') {
           section.endTime = timeItem[0];
 
@@ -192,7 +172,7 @@ var Notation = (function() {
         if (!section) {
           section = $.extend(true, {}, sections[note.sectionKey], {
             notes: [note],
-            startTime: 0
+            startTime: note.time
           });
           sequences.push(section);
           return;
@@ -228,20 +208,36 @@ var Notation = (function() {
       });
     }
 
-    $.each(sequences, function(index, section) {
-      self.sequences.push(new Section(section));
+    $.each(sequences, function(index, item) {
+      var section = new Section(item),
+        page = pages[section.page - 1];
+
+      $.each(section.notes(), function(i, note) {
+        self.notes.push(note);
+      });
+
+      if (page && page.length) {
+        page.push(section);
+      } else {
+        pages.push([section]);
+      }
     });
+
+    self.pages(pages);
 
     ko.computed(function() {
       var currentTime = self.currentTime(),
-        sequences = self.sequences();
+        pages = self.pages();
 
-      $.each(sequences, function(i, section) {
-        section.isActive(false);
+      $.each(pages, function(indexPage, page) {
 
-        if (section.startTime < currentTime && section.endTime > currentTime) {
-          section.isActive(true);
-        }
+        $.each(page, function(indexSection, section) {
+          section.isActive(false);
+
+          if (section.startTime < currentTime && section.endTime > currentTime) {
+            section.isActive(true);
+          }
+        });
       });
     });
   };

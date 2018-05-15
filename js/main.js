@@ -17,22 +17,18 @@ $(function() {
     return null;
   };
 
-  $.getScript('./notations/' + $.queryString('notation') + '/data.js').then(function() {
+  $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
     notation = new Notation({
-      scale: $('.g-container').innerWidth() / width,
+      scale: $('.g-container').innerWidth() / options.width,
       speed: 1,
-      notationWidth: width,
-      notationHeight: height
+      title: options.title,
+      sections: options.sections,
+      notes: options.notes,
+      times: options.times,
+      width: options.width,
+      height: options.height
     });
-    $audio[0].src = audioUrl;
-    notation.init({
-      sections: sections,
-      notes: notes,
-      times: times,
-      images: images,
-      audioUrl: audioUrl,
-      videoUrl: videoUrl
-    });
+    $audio[0].src = './data/' + options.title + '/audio.mp3';
     ko.applyBindings(notation);
   });
 

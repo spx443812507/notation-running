@@ -47,13 +47,10 @@
   </div>
   <div class="g-content">
     <div class="pdf" id="pdf">
-      <div class="pages" data-bind="style: {height: pageHeight}">
-        <!-- ko foreach: images-->
-        <img alt="" data-bind="attr: {src: $data}">
-        <!-- /ko -->
-        <!-- ko foreach: sequences-->
-        <div class="section"
-             data-bind="attr: {id: id}, style: {width: width(), height: height(), left: left(), top: top()},
+      <div class="pages" data-bind="foreach: pages">
+        <img alt="" data-bind="attr: {src: './data/' + $parent.title() + '/img/' + ($index() + 1) + '.png'}">
+        <!-- ko foreach: $data-->
+        <div class="section" data-bind="attr: {id: id}, style: {width: width(), height: height(), left: left(), top: top()},
                      css: {active: isActive()}, click: $root.changeSection"></div>
         <!-- ko foreach: notes-->
         <div class="note"
@@ -61,7 +58,7 @@
         <!-- /ko -->
         <!-- /ko -->
       </div>
-      <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, sequences: sequences, isShow: true}} -->
+      <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, notes: notes, isShow: true}} -->
       <!-- /ko -->
     </div>
   </div>

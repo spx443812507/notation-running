@@ -5,18 +5,13 @@
         currentTime = info.currentTime,
         speed = info.speed,
         playing = info.playing,
-        sequences = allBindings.get('sequences')(),
+        notes = allBindings.get('notes')(),
         $element = $(element),
-        notes = [],
         noteIndex;
 
       if (!playing) {
         return $element.stop();
       }
-
-      $.each(sequences, function(indexSection, section) {
-        notes = notes.concat(section.notes());
-      });
 
       $.each(notes, function(index, note) {
         if (note.time > currentTime) {
@@ -62,14 +57,14 @@
     var self = this;
 
     self.isShow = params.isShow;
-    self.sequences = params.sequences;
+    self.notes = params.notes;
     self.cursor = params.cursor;
   };
 
   ko.components.register('notation-cursor', {
     viewModel: CursorViewModel,
     template: '<!-- ko if: isShow -->' +
-    '<div class="cursor-note" data-bind="cursor: cursor, sequences: sequences"></div>' +
+    '<div class="cursor-note" data-bind="cursor: cursor, notes: notes"></div>' +
     '<!-- /ko -->'
   });
 
