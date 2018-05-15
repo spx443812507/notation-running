@@ -201,6 +201,7 @@ var Notation = (function() {
         } else {
           var preSectionLastNote = section.notes[section.notes.length - 1];
 
+          //添加小节尾线
           if (preSectionLastNote.sectionId !== note.sectionId) {
             section.notes.push({
               id: 'endLine_' + section.id,

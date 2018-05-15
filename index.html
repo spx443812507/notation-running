@@ -48,7 +48,7 @@
   <div class="g-content">
     <div class="pdf" id="pdf">
       <div class="pages" data-bind="foreach: pages">
-        <div class="page">
+        <div class="page" data-bind="attr: {id: $index() + 1}">
           <img alt="" data-bind="attr: {src: './data/' + $parent.title() + '/img/' + ($index() + 1) + '.png'}">
           <!-- ko foreach: sections-->
           <div class="section"
