@@ -106,6 +106,10 @@ var Notation = (function() {
     self.showSectionCursor = ko.observable(false);
     //是否显示音符光标
     self.showNoteCursor = ko.observable(true);
+    //当前播放的页码
+    self.currentPage = ko.observable();
+    //当前播放的小节
+    self.currentSection = ko.observable();
     //初始化
     self.init();
   }
@@ -260,13 +264,13 @@ var Notation = (function() {
         pages = self.pages();
 
       $.each(pages, function(indexPage, page) {
-        page.isActive(page.startTime < currentTime && page.endTime > currentTime);
+        if (page.startTime < currentTime && page.endTime > currentTime) {
+          self.currentPage(indexPage);
+        }
 
         $.each(page.sections(), function(indexSection, section) {
-          section.isActive(false);
-
           if (section.startTime < currentTime && section.endTime > currentTime) {
-            section.isActive(true);
+            self.currentSection(indexSection);
           }
         });
       });

@@ -52,13 +52,13 @@
           <img alt="" data-bind="attr: {src: './data/' + $parent.title() + '/img/' + ($index() + 1) + '.png'}">
           <!-- ko foreach: sections-->
           <div class="section"
-               data-bind="attr: {id: id}, style: style, css: {active: isActive()}, click: $root.changeSection"></div>
+               data-bind="attr: {id: id}, style: style, css: {active: $root.currentSection() === $index()}, click: $root.changeSection"></div>
           <!-- ko foreach: notes-->
           <div class="note" data-bind="attr: {id: id}, style: style"></div>
           <!-- /ko -->
           <!-- /ko -->
 
-          <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, cursorStyle: cursorStyle, isActive: isActive, notes: $parent.notes, isShow: true}} -->
+          <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, cursorStyle: cursorStyle, isActive: $root.currentPage() === $index(), notes: $parent.notes, isShow: true}} -->
           <!-- /ko -->
         </div>
       </div>

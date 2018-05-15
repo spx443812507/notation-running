@@ -29,7 +29,7 @@
           nextNote;
 
         $element = $element.stop().animate(note.style(),
-          (note.time - currentTime) * 1000 * speed - 1, 'linear', function() {
+          (note.time - currentTime) * 1000 * speed, 'linear', function() {
             currentTime = note.time;
 
             if (notes[noteIndex + 1]) {
@@ -57,7 +57,7 @@
 
   ko.components.register('notation-cursor', {
     viewModel: CursorViewModel,
-    template: '<div class="cursor-note" data-bind="cursor: cursor, notes: notes, style: cursorStyle, css: {active: isActive()}"></div>'
+    template: '<div class="cursor-note" data-bind="cursor: cursor, notes: notes, style: cursorStyle, css: {active: isActive}"></div>'
   });
 
   var cursor = function() {
