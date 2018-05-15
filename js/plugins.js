@@ -5,7 +5,8 @@
         currentTime = info.currentTime,
         speed = info.speed,
         playing = info.playing,
-        notes = allBindings.get('notes')(),
+        page = allBindings.get('page'),
+        notes = page.notes,
         $element = $(element),
         noteIndex;
 
@@ -13,35 +14,36 @@
         return $element.stop();
       }
 
-      $.each(notes, function(index, note) {
-        if (note.time > currentTime) {
-          noteIndex = index;
-          return false;
-        }
-      });
+      if (page.startTime < currentTime && page.endTime > currentTime) {
+        $.each(notes, function(index, note) {
+          if (note.time > currentTime) {
+            noteIndex = index;
+            return false;
+          }
+        });
 
-      if (noteIndex !== undefined) {
-        moveNext(noteIndex);
+        if (noteIndex !== undefined) {
+          moveNext(noteIndex);
+        }
       }
 
       function moveNext(noteIndex) {
         var note = notes[noteIndex],
           nextNote;
 
-        $element = $element.stop().animate(note.style(),
-          (note.time - currentTime) * 1000 * speed, 'linear', function() {
-            currentTime = note.time;
+        $element = $element.stop().animate(note.style, (note.time - currentTime) * 1000 * speed, 'linear', function() {
+          currentTime = note.time;
 
-            if (notes[noteIndex + 1]) {
-              nextNote = notes[noteIndex + 1];
+          if (notes[noteIndex + 1]) {
+            nextNote = notes[noteIndex + 1];
 
-              if (note.sectionId !== nextNote.sectionId) {
-                $element.css(nextNote.style());
-              }
-
-              moveNext(noteIndex + 1);
+            if (note.sectionId !== nextNote.sectionId) {
+              $element.css(nextNote.style);
             }
-          });
+
+            moveNext(noteIndex + 1);
+          }
+        });
       }
     }
   };
@@ -49,15 +51,14 @@
   var CursorViewModel = function(params) {
     var self = this;
 
-    self.notes = params.notes;
+    self.page = params.page;
     self.cursor = params.cursor;
     self.cursorStyle = params.cursorStyle;
-    self.isActive = params.isActive;
   };
 
   ko.components.register('notation-cursor', {
     viewModel: CursorViewModel,
-    template: '<div class="cursor-note" data-bind="cursor: cursor, notes: notes, style: cursorStyle, css: {active: isActive}"></div>'
+    template: '<div class="cursor-note" data-bind="cursor: cursor, page: page, style: cursorStyle"></div>'
   });
 
   var cursor = function() {

@@ -48,17 +48,19 @@
   <div class="g-content">
     <div class="pdf" id="pdf">
       <div class="pages" data-bind="foreach: pages">
-        <div class="page" data-bind="attr: {id: $index() + 1}">
-          <img alt="" data-bind="attr: {src: './data/' + $parent.title() + '/img/' + ($index() + 1) + '.png'}">
+        <div class="page" data-bind="attr: {id: 'page_' + id}">
+          <img alt="" data-bind="attr: {src: './data/' + $parent.title() + '/img/' + id + '.png'}">
           <!-- ko foreach: sections-->
           <div class="section"
-               data-bind="attr: {id: id}, style: style, css: {active: $root.currentSection() === $index()}, click: $root.changeSection"></div>
+               data-bind="attr: {id: id}, style: style, css: {active: $root.currentSection() === id}, click: $root.changeSection"></div>
           <!-- ko foreach: notes-->
           <div class="note" data-bind="attr: {id: id}, style: style"></div>
           <!-- /ko -->
           <!-- /ko -->
 
-          <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, cursorStyle: cursorStyle, isActive: $root.currentPage() === $index(), notes: $parent.notes, isShow: true}} -->
+          <!-- ko if: $root.currentPage() === id-->
+          <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, cursorStyle: cursorStyle, page: $data, isShow: true}} -->
+          <!-- /ko -->
           <!-- /ko -->
         </div>
       </div>

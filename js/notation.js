@@ -48,7 +48,6 @@ var Section = (function() {
     this.top = undefined;
     this.startTime = undefined;
     this.endTime = undefined;
-    this.isActive = ko.observable(false);
     this.notes = ko.observableArray();
 
     if (section) {
@@ -138,6 +137,12 @@ var Notation = (function() {
           height: height,
           left: left,
           top: top,
+          style: {
+            width: width + 'px',
+            height: height + 'px',
+            left: left + 'px',
+            top: top + 'px'
+          },
           notes: []
         };
       });
@@ -160,6 +165,12 @@ var Notation = (function() {
           height: height,
           left: left,
           top: top,
+          style: {
+            width: '2px',
+            height: height + 'px',
+            left: left + 'px',
+            top: top + 'px'
+          },
           sectionId: sectionId,
           sectionKey: sectionKey
         };
@@ -180,6 +191,12 @@ var Notation = (function() {
             height: section.height,
             left: section.left + section.width,
             top: section.top,
+            style: {
+              width: '2px',
+              height: section.height + 'px',
+              left: section.left + section.width + 'px',
+              top: section.top + 'px'
+            },
             sectionId: section.id,
             time: timeItem[0]
           });
@@ -210,6 +227,12 @@ var Notation = (function() {
               height: section.height,
               left: section.left + section.width,
               top: section.top,
+              style: {
+                width: '2px',
+                height: section.height + 'px',
+                left: section.left + section.width + 'px',
+                top: section.top + 'px'
+              },
               sectionId: section.id,
               time: note.time
             });
@@ -228,31 +251,28 @@ var Notation = (function() {
     }
 
     $.each(sequences, function(index, item) {
-      var section = new Section(item),
-        page = pages[section.page - 1];
+      var page = pages[item.page - 1];
 
-      $.each(section.notes(), function(i, note) {
-        self.notes.push(note);
-      });
-
-      if (page && ko.isObservable(page.sections)) {
-        page.sections.push(section);
+      if (page) {
+        page.notes = page.notes.concat(item.notes);
+        page.sections.push(item);
       } else {
         pages.push({
-          cursorStyle: ko.observable({
+          id: item.page,
+          cursorStyle: {
             width: item.notes[0].width + 'px',
             height: item.notes[0].height + 'px',
             left: item.notes[0].left + 'px',
             top: item.notes[0].top + 'px'
-          }),
-          isActive: ko.observable(),
-          sections: ko.observableArray([section])
+          },
+          notes: [].concat(item.notes),
+          sections: [item]
         });
       }
     });
 
     $.each(pages, function(i, page) {
-      var sections = page.sections();
+      var sections = page.sections;
 
       page.startTime = sections[0].startTime;
       page.endTime = sections[sections.length - 1].endTime;
@@ -261,17 +281,16 @@ var Notation = (function() {
     self.pages(pages);
 
     ko.computed(function() {
-      var currentTime = self.currentTime(),
-        pages = self.pages();
+      var currentTime = self.currentTime();
 
       $.each(pages, function(indexPage, page) {
         if (page.startTime < currentTime && page.endTime > currentTime) {
-          self.currentPage(indexPage);
+          self.currentPage(page.id);
         }
 
-        $.each(page.sections(), function(indexSection, section) {
+        $.each(page.sections, function(indexSection, section) {
           if (section.startTime < currentTime && section.endTime > currentTime) {
-            self.currentSection(indexSection);
+            self.currentSection(section.id);
           }
         });
       });
