@@ -235,10 +235,10 @@ var Notation = (function() {
       } else {
         pages.push({
           cursorStyle: ko.observable({
-            width: 2,
-            height: section.height + 'px',
-            left: section.left + 'px',
-            top: section.top + 'px'
+            width: item.notes[0].width + 'px',
+            height: item.notes[0].height + 'px',
+            left: item.notes[0].left + 'px',
+            top: item.notes[0].top + 'px'
           }),
           isActive: ko.observable(),
           sections: ko.observableArray([section])

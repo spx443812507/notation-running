@@ -47,8 +47,13 @@
 }
 
 .cursor-note {
+  display: none;
   width: 2px;
   height: 100%;
   background-color: #EE5757;
   z-index: 2;
+}
+
+.cursor-note.active {
+  display: block;
 }

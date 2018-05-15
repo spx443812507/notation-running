@@ -49,17 +49,15 @@
   var CursorViewModel = function(params) {
     var self = this;
 
-    self.isShow = params.isShow;
     self.notes = params.notes;
     self.cursor = params.cursor;
-    self.style = params.style;
+    self.cursorStyle = params.cursorStyle;
+    self.isActive = params.isActive;
   };
 
   ko.components.register('notation-cursor', {
     viewModel: CursorViewModel,
-    template: '<!-- ko if: isShow -->' +
-    '<div class="cursor-note" data-bind="cursor: cursor, notes: notes, style: style"></div>' +
-    '<!-- /ko -->'
+    template: '<div class="cursor-note" data-bind="cursor: cursor, notes: notes, style: cursorStyle, css: {active: isActive()}"></div>'
   });
 
   var cursor = function() {
