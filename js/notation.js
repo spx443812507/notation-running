@@ -93,8 +93,6 @@ var Notation = (function() {
     self.options = $.extend({}, defaultOptions, options);
     //乐谱标题
     self.title = ko.observable(self.options.title);
-    //音符列表
-    self.notes = ko.observableArray();
     //乐谱页
     self.pages = ko.observableArray();
     //当前时间
@@ -106,9 +104,13 @@ var Notation = (function() {
     //是否显示音符光标
     self.showNoteCursor = ko.observable(true);
     //当前播放的页码
-    self.currentPage = ko.observable();
+    self.currentPageIndex = ko.observable();
     //当前播放的小节
-    self.currentSection = ko.observable();
+    self.currentSectionIndex = ko.observable();
+    //乐谱整体高度
+    self.notationHeight = ko.observable((self.options.sum * self.options.height) + 'px');
+    //乐谱图片
+    self.images = ko.observableArray();
     //初始化
     self.init();
   }
@@ -120,6 +122,10 @@ var Notation = (function() {
       times = self.options.times,
       sequences = [],
       pages = [];
+
+    for (var i = 0; i < self.options.sum; i++) {
+      self.images.push(i + 1);
+    }
 
     if (sections && sections.length) {
       $.each(sections, function(sectionIndex, sectionItem) {
@@ -251,11 +257,14 @@ var Notation = (function() {
     }
 
     $.each(sequences, function(index, item) {
-      var page = pages[item.page - 1];
+      var prePage = pages[pages.length - 1];
 
-      if (page) {
-        page.notes = page.notes.concat(item.notes);
-        page.sections.push(item);
+      //小节播放序号
+      item.index = index;
+
+      if (prePage && prePage.id === item.page) {
+        prePage.notes = prePage.notes.concat(item.notes);
+        prePage.sections.push(item);
       } else {
         pages.push({
           id: item.page,
@@ -264,6 +273,10 @@ var Notation = (function() {
             height: item.notes[0].height + 'px',
             left: item.notes[0].left + 'px',
             top: item.notes[0].top + 'px'
+          },
+          style: {
+            top: ((item.page - 1) * self.options.height * self.options.scale) + 'px',
+            height: (self.options.height * self.options.scale) + 'px'
           },
           notes: [].concat(item.notes),
           sections: [item]
@@ -285,19 +298,16 @@ var Notation = (function() {
 
       $.each(pages, function(indexPage, page) {
         if (page.startTime < currentTime && page.endTime > currentTime) {
-          self.currentPage(page.id);
+          self.currentPageIndex(indexPage);
         }
 
         $.each(page.sections, function(indexSection, section) {
           if (section.startTime < currentTime && section.endTime > currentTime) {
-            self.currentSection(section.id);
+            self.currentSectionIndex(section.index);
           }
         });
       });
     });
-  };
-
-  Notation.prototype.changeSection = function(section) {
   };
 
   return Notation;

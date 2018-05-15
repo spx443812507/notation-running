@@ -19,14 +19,15 @@ $(function() {
 
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
     notation = new Notation({
-      scale: $('.g-container').innerWidth() / options.width,
+      scale: $('.notation').innerWidth() / options.width,
       speed: 1,
       title: options.title,
       sections: options.sections,
       notes: options.notes,
       times: options.times,
       width: options.width,
-      height: options.height
+      height: options.height,
+      sum: options.sum
     });
     $audio[0].src = './data/' + options.title + '/audio.mp3';
     ko.applyBindings(notation);

@@ -11,21 +11,25 @@
   padding: 30px 0;
 }
 
-.pdf {
+.notation {
   position: relative;
+  width: 100%;
+}
+
+.notation img {
   width: 100%;
 }
 
 .pages {
-  position: relative;
-}
-
-.pages img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
 }
 
 .pages .page {
-  position: relative;
+  position: absolute;
+  width: 100%;
 }
 
 .section, .note, .cursor-note {
