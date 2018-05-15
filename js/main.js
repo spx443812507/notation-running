@@ -43,6 +43,9 @@ $(function() {
 
   $audio.on('timeupdate', function() {
     notation.currentTime($audio[0].currentTime);
-    window.cursor.set(true, $audio[0].currentTime, 1);
   });
+
+  window.setInterval(function() {
+    window.cursor.set(true, $audio[0].currentTime, 1);
+  }, 1000);
 });
