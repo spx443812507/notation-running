@@ -28,27 +28,20 @@
         var note = notes[noteIndex],
           nextNote;
 
-        $element = $element.stop().animate({
-          'left': note.left(),
-          'top': note.top(),
-          'height': note.height()
-        }, (note.time - currentTime) * 1000 * speed - 1, 'linear', function() {
-          currentTime = note.time;
+        $element = $element.stop().animate(note.style(),
+          (note.time - currentTime) * 1000 * speed - 1, 'linear', function() {
+            currentTime = note.time;
 
-          if (notes[noteIndex + 1]) {
-            nextNote = notes[noteIndex + 1];
+            if (notes[noteIndex + 1]) {
+              nextNote = notes[noteIndex + 1];
 
-            if (note.sectionId !== nextNote.sectionId) {
-              $element.css({
-                left: nextNote.left(),
-                height: nextNote.height(),
-                top: nextNote.top()
-              });
+              if (note.sectionId !== nextNote.sectionId) {
+                $element.css(nextNote.style());
+              }
+
+              moveNext(noteIndex + 1);
             }
-
-            moveNext(noteIndex + 1);
-          }
-        });
+          });
       }
     }
   };
@@ -59,12 +52,13 @@
     self.isShow = params.isShow;
     self.notes = params.notes;
     self.cursor = params.cursor;
+    self.style = params.style;
   };
 
   ko.components.register('notation-cursor', {
     viewModel: CursorViewModel,
     template: '<!-- ko if: isShow -->' +
-    '<div class="cursor-note" data-bind="cursor: cursor, notes: notes"></div>' +
+    '<div class="cursor-note" data-bind="cursor: cursor, notes: notes, style: style"></div>' +
     '<!-- /ko -->'
   });
 

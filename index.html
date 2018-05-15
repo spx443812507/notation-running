@@ -48,18 +48,22 @@
   <div class="g-content">
     <div class="pdf" id="pdf">
       <div class="pages" data-bind="foreach: pages">
-        <img alt="" data-bind="attr: {src: './data/' + $parent.title() + '/img/' + ($index() + 1) + '.png'}">
-        <!-- ko foreach: $data-->
-        <div class="section" data-bind="attr: {id: id}, style: {width: width(), height: height(), left: left(), top: top()},
-                     css: {active: isActive()}, click: $root.changeSection"></div>
-        <!-- ko foreach: notes-->
-        <div class="note"
-             data-bind="attr: {id: id}, style: {width: width(), height: height(), left: left(), top: top()}"></div>
-        <!-- /ko -->
-        <!-- /ko -->
+        <div class="page">
+          <img alt="" data-bind="attr: {src: './data/' + $parent.title() + '/img/' + ($index() + 1) + '.png'}">
+          <!-- ko foreach: sections-->
+          <div class="section"
+               data-bind="attr: {id: id}, style: style, css: {active: isActive()}, click: $root.changeSection"></div>
+          <!-- ko foreach: notes-->
+          <div class="note" data-bind="attr: {id: id}, style: style"></div>
+          <!-- /ko -->
+          <!-- /ko -->
+
+          <!-- ko if: isActive-->
+          <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, style: cursorStyle, notes: $parent.notes, isShow: true}} -->
+          <!-- /ko -->
+          <!-- /ko -->
+        </div>
       </div>
-      <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, notes: notes, isShow: true}} -->
-      <!-- /ko -->
     </div>
   </div>
 </div>

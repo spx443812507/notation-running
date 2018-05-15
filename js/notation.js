@@ -3,10 +3,11 @@ var Note = (function() {
     this.sectionId = undefined;
     this.id = undefined;
     this.page = ko.observable();
-    this.width = ko.observable();
-    this.height = ko.observable();
-    this.left = ko.observable();
-    this.top = ko.observable();
+    this.style = ko.observable();
+    this.width = undefined;
+    this.height = undefined;
+    this.left = undefined;
+    this.top = undefined;
     this.time = undefined;
 
     if (note) {
@@ -20,11 +21,17 @@ var Note = (function() {
     self.sectionId = note.sectionId;
     self.id = note.id;
     self.page(note.page);
-    self.width(note.width + 'px');
-    self.height(note.height + 'px');
-    self.left(note.left + 'px');
-    self.top(note.top + 'px');
+    self.width = note.width;
+    self.height = note.height;
+    self.left = note.left;
+    self.top = note.top;
     self.time = note.time;
+    self.style({
+      width: self.width + 'px',
+      height: self.height + 'px',
+      left: self.left + 'px',
+      top: self.top + 'px'
+    });
   };
 
   return Note;
@@ -34,10 +41,11 @@ var Section = (function() {
   function Section(section) {
     this.id = undefined;
     this.page = undefined;
-    this.width = ko.observable();
-    this.height = ko.observable();
-    this.left = ko.observable();
-    this.top = ko.observable();
+    this.style = ko.observable();
+    this.width = undefined;
+    this.height = undefined;
+    this.left = undefined;
+    this.top = undefined;
     this.startTime = undefined;
     this.endTime = undefined;
     this.isActive = ko.observable(false);
@@ -53,12 +61,18 @@ var Section = (function() {
 
     self.id = section.id;
     self.page = section.page;
-    self.width(section.width + 'px');
-    self.height(section.height + 'px');
-    self.left(section.left + 'px');
-    self.top(section.top + 'px');
+    self.width = section.width;
+    self.height = section.height;
+    self.left = section.left;
+    self.top = section.top;
     self.startTime = section.startTime;
     self.endTime = section.endTime;
+    self.style({
+      width: self.width + 'px',
+      height: self.height + 'px',
+      left: self.left + 'px',
+      top: self.top + 'px'
+    });
 
     if (section.notes && section.notes.length) {
       $.each(section.notes, function(i, item) {
@@ -111,7 +125,7 @@ var Notation = (function() {
           left = sectionItem[1].x * self.options.scale,
           id = sectionItem[0][0],
           page = sectionItem[0][1],
-          top = (sectionItem[1].y + ((page - 1) * self.options.height)) * self.options.scale;
+          top = sectionItem[1].y * self.options.scale;
 
         sections['section' + id] = {
           id: id,
@@ -133,7 +147,7 @@ var Notation = (function() {
           left = noteItem[1].x * self.options.scale,
           id = noteItem[0][0],
           page = noteItem[0][1],
-          top = (noteItem[1].y + ((page - 1) * self.options.height)) * self.options.scale;
+          top = noteItem[1].y * self.options.scale;
 
         notes['note' + id] = {
           id: id,
@@ -216,11 +230,27 @@ var Notation = (function() {
         self.notes.push(note);
       });
 
-      if (page && page.length) {
-        page.push(section);
+      if (page && ko.isObservable(page.sections)) {
+        page.sections.push(section);
       } else {
-        pages.push([section]);
+        pages.push({
+          cursorStyle: ko.observable({
+            width: 2,
+            height: section.height + 'px',
+            left: section.left + 'px',
+            top: section.top + 'px'
+          }),
+          isActive: ko.observable(),
+          sections: ko.observableArray([section])
+        });
       }
+    });
+
+    $.each(pages, function(i, page) {
+      var sections = page.sections();
+
+      page.startTime = sections[0].startTime;
+      page.endTime = sections[sections.length - 1].endTime;
     });
 
     self.pages(pages);
@@ -230,8 +260,9 @@ var Notation = (function() {
         pages = self.pages();
 
       $.each(pages, function(indexPage, page) {
+        page.isActive(page.startTime < currentTime && page.endTime > currentTime);
 
-        $.each(page, function(indexSection, section) {
+        $.each(page.sections(), function(indexSection, section) {
           section.isActive(false);
 
           if (section.startTime < currentTime && section.endTime > currentTime) {
