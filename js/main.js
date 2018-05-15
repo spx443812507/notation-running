@@ -1,11 +1,6 @@
 $(function() {
   var $audio = $('#audio'),
-    notation = new Notation({
-      scale: $('.g-container').innerWidth() / 2479,
-      speed: 1,
-      notationWidth: 2479,
-      notationHeight: 3508
-    });
+    notation;
 
   //获取url中指定参数名的值
   $.queryString = function(name, url) {
@@ -22,7 +17,13 @@ $(function() {
     return null;
   };
 
-  $.getScript('./' + $.queryString('notation') + '/data.js').then(function() {
+  $.getScript('./notations/' + $.queryString('notation') + '/data.js').then(function() {
+    notation = new Notation({
+      scale: $('.g-container').innerWidth() / width,
+      speed: 1,
+      notationWidth: width,
+      notationHeight: height
+    });
     $audio[0].src = audioUrl;
     notation.init({
       sections: sections,
@@ -32,9 +33,8 @@ $(function() {
       audioUrl: audioUrl,
       videoUrl: videoUrl
     });
+    ko.applyBindings(notation);
   });
-
-  ko.applyBindings(notation);
 
   $audio.on('play', function() {
     notation.currentTime($audio[0].currentTime);

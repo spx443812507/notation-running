@@ -203,7 +203,7 @@ var Notation = (function() {
         } else {
           var preSectionLastNote = section.notes[section.notes.length - 1];
 
-          if (preSectionLastNote.top !== note.top) {
+          if (preSectionLastNote.sectionId !== note.sectionId) {
             section.notes.push({
               id: 'endLine_' + section.id,
               page: section.page,

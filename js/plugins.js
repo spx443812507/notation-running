@@ -43,7 +43,7 @@
           if (notes[noteIndex + 1]) {
             nextNote = notes[noteIndex + 1];
 
-            if (note.top() !== nextNote.top()) {
+            if (note.sectionId !== nextNote.sectionId) {
               $element.css({
                 left: nextNote.left(),
                 height: nextNote.height(),
