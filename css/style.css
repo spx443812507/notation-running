@@ -30,6 +30,7 @@
 .pages .page {
   position: absolute;
   width: 100%;
+  background-size: 100%;
 }
 
 .section, .note, .cursor-note {

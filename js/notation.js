@@ -276,7 +276,8 @@ var Notation = (function() {
           },
           style: {
             top: ((item.page - 1) * self.options.height * self.options.scale) + 'px',
-            height: (self.options.height * self.options.scale) + 'px'
+            height: (self.options.height * self.options.scale) + 'px',
+            'background-image': 'url(./data/' + self.options.title + '/img/' + item.page + '.png)'
           },
           notes: [].concat(item.notes),
           sections: [item]

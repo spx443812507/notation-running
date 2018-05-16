@@ -51,7 +51,8 @@
       <img alt="" data-bind="attr: {src: './data/' + $parent.title() + '/img/' + $data + '.png'}">
       <!-- /ko -->
       <div class="pages" data-bind="foreach: pages, style: {height: notationHeight}">
-        <div class="page" data-bind="attr: {id: 'page_' + id}, style: style">
+        <div class="page"
+             data-bind="attr: {id: 'page_' + id}, visible: $root.currentPageIndex() === $index(), style: style">
           <!-- ko foreach: sections-->
           <div class="section"
                data-bind="attr: {id: id}, style: style, css: {active: $root.currentSectionIndex() === index}, click: $root.changeSection"></div>
@@ -60,9 +61,7 @@
           <!-- /ko -->
           <!-- /ko -->
 
-          <!-- ko if: $root.currentPageIndex() === $index()-->
           <!-- ko component: {name: 'notation-cursor', params: {cursor: cursor.cursor, cursorStyle: cursorStyle, page: $data, isShow: true}} -->
-          <!-- /ko -->
           <!-- /ko -->
         </div>
       </div>
