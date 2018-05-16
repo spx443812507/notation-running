@@ -108,7 +108,7 @@ var Notation = (function() {
     //当前播放的小节
     self.currentSectionIndex = ko.observable();
     //乐谱整体高度
-    self.notationHeight = ko.observable((self.options.sum * self.options.height) + 'px');
+    self.notationHeight = ko.observable((self.options.sum * self.options.height * self.options.scale) + 'px');
     //乐谱图片
     self.images = ko.observableArray();
     //初始化

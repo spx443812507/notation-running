@@ -1,3 +1,19 @@
+html {
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  word-wrap: break-word;
+}
+
+html, body {
+  height: 100%;
+}
+
 .g-container {
   width: 100%;
   height: 100%;
@@ -7,8 +23,20 @@
 }
 
 .g-header {
-  position: relative;
-  padding: 30px 0;
+  position: absolute;
+  width: 100%;
+}
+
+.g-header audio {
+  width: 100%;
+}
+
+.g-content {
+  position: absolute;
+  width: 100%;
+  top: 32px;
+  bottom: 0;
+  overflow: auto;
 }
 
 .notation {
