@@ -37,6 +37,8 @@ var Notation = (function() {
       sections = self.options.sections,
       notes = self.options.notes,
       times = self.options.times,
+      sectionMap = {},
+      noteMap = {},
       sequences = [],
       pages = [];
 
@@ -53,8 +55,8 @@ var Notation = (function() {
           page = sectionItem[0][1],
           top = sectionItem[1].y * self.options.scale;
 
-        sections['section' + id] = {
-          id: id,
+        sectionMap['section_' + id] = {
+          id: 'section_' + id,
           page: page,
           width: width,
           height: height,
@@ -73,16 +75,15 @@ var Notation = (function() {
 
     if (notes && notes.length) {
       $.each(notes, function(noteIndex, noteItem) {
-        var sectionId = parseInt(noteItem[0][0].toString().split('.')[0]),
-          sectionKey = 'section' + sectionId,
+        var sectionId = 'section_' + noteItem[0][0].toString().split('.')[0],
           height = (noteItem[1].eY - noteItem[1].y) * self.options.scale,
           left = noteItem[1].x * self.options.scale,
           id = noteItem[0][0],
           page = noteItem[0][1],
           top = noteItem[1].y * self.options.scale;
 
-        notes['note' + id] = {
-          id: id,
+        noteMap['note_' + id] = {
+          id: 'note_' + id,
           page: page,
           width: 2,
           height: height,
@@ -94,8 +95,7 @@ var Notation = (function() {
             left: left + 'px',
             top: top + 'px'
           },
-          sectionId: sectionId,
-          sectionKey: sectionKey
+          sectionId: sectionId
         };
       });
     }
@@ -125,10 +125,10 @@ var Notation = (function() {
           });
         }
 
-        var note = $.extend(true, {}, notes['note' + timeItem[1]], {time: timeItem[0]});
+        var note = $.extend(true, {}, noteMap['note_' + timeItem[1]], {time: timeItem[0]});
 
         if (!section) {
-          section = $.extend(true, {}, sections[note.sectionKey], {
+          section = $.extend(true, {}, sectionMap[note.sectionId], {
             notes: [note],
             startTime: note.time
           });
@@ -163,7 +163,7 @@ var Notation = (function() {
 
           section.endTime = note.time;
 
-          section = $.extend(true, {}, sections[note.sectionKey], {
+          section = $.extend(true, {}, sectionMap[note.sectionId], {
             notes: [note],
             startTime: note.time
           });

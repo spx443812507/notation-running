@@ -86,4 +86,8 @@ $(function() {
     notation.currentTime($audio[0].currentTime);
     window.cursor.set(isPlaying, $audio[0].currentTime, 1);
   });
+
+  window.setInterval(function() {
+    window.cursor.set(isPlaying, $audio[0].currentTime, 1);
+  }, 1000);
 });

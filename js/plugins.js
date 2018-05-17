@@ -16,7 +16,7 @@
 
       if (page.startTime < currentTime && page.endTime > currentTime) {
         $.each(notes, function(index, note) {
-          if (note.time >= currentTime) {
+          if (note.time > currentTime) {
             noteIndex = index;
             return false;
           }
@@ -29,14 +29,21 @@
 
       function moveNext(noteIndex) {
         var note = notes[noteIndex],
-          preNote = notes[noteIndex - 1];
+          nextNote;
 
-        $element = $element.stop().animate({
-          width: note.width,
-          height: note.height,
-          top: note.top,
-          left: (currentTime - preNote.time) / (note.time - preNote.time) * (note.left - preNote.left) + preNote.left
-        }, 0.2 * 1000 * speed, 'linear');
+        $element = $element.stop().animate(note.style, (note.time - currentTime) * 1000 * speed, 'linear', function() {
+          currentTime = note.time;
+
+          if (notes[noteIndex + 1]) {
+            nextNote = notes[noteIndex + 1];
+
+            if (note.sectionId !== nextNote.sectionId) {
+              $element.css(nextNote.style);
+            }
+
+            moveNext(noteIndex + 1);
+          }
+        });
       }
     }
   };
