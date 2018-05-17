@@ -59,7 +59,7 @@ $(function() {
         if (!isScrolling && scrollTo.length) {
           $content.animate({
             scrollTop: scrollTo.css('top')
-          }, 1000);
+          }, 500);
         }
       }
     });
