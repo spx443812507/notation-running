@@ -31,11 +31,11 @@
     </div>
   </div>
   <div class="g-content">
-    <div class="notation">
+    <div class="notation" data-bind="style: {width: notationWidth, height: notationHeight}">
       <!-- ko foreach: images-->
       <img alt="" data-bind="attr: {src: './data/' + $parent.title() + '/img/' + $data + '.png'}">
       <!-- /ko -->
-      <div class="pages" data-bind="foreach: pages, style: {height: notationHeight}">
+      <div class="pages" data-bind="foreach: pages">
         <div class="page"
              data-bind="attr: {id: 'page_' + id}, visible: $root.currentPageIndex() === $index(), style: style">
           <!-- ko foreach: sections-->

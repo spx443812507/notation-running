@@ -24,6 +24,8 @@ var Notation = (function() {
     self.currentSectionIndex = ko.observable();
     //乐谱整体高度
     self.notationHeight = ko.observable((self.options.sum * self.options.height * self.options.scale) + 'px');
+    //乐谱整体宽度
+    self.notationWidth = ko.observable((self.options.width * self.options.scale) + 'px');
     //乐谱图片
     self.images = ko.observableArray();
     //初始化

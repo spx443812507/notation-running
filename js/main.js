@@ -18,8 +18,12 @@ $(function() {
   };
 
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
+    var $content = $('.g-content'),
+      widthScale = $content.innerWidth() / options.width,
+      heightScale = $content.innerHeight() / options.height;
+
     notation = new Notation({
-      scale: $('.notation').innerWidth() / options.width,
+      scale: widthScale > heightScale ? heightScale : widthScale,
       speed: 1,
       title: options.title,
       sections: options.sections,
