@@ -1,6 +1,7 @@
 $(function() {
   var $audio = $('#audio'),
-    notation;
+    notation,
+    isPlaying = false;
 
   //获取url中指定参数名的值
   $.queryString = function(name, url) {
@@ -72,19 +73,17 @@ $(function() {
   });
 
   $audio.on('play', function() {
-    notation.currentTime($audio[0].currentTime);
-    window.cursor.set(true, $audio[0].currentTime, 1);
+    isPlaying = true;
+    window.cursor.set(isPlaying, $audio[0].currentTime, 1);
   });
 
   $audio.on('pause', function audioEvent() {
-    notation.currentTime(false, $audio[0].currentTime);
+    isPlaying = false;
+    window.cursor.set(isPlaying, $audio[0].currentTime, 1);
   });
 
   $audio.on('timeupdate', function() {
     notation.currentTime($audio[0].currentTime);
+    window.cursor.set(isPlaying, $audio[0].currentTime, 1);
   });
-
-  window.setInterval(function() {
-    window.cursor.set(true, $audio[0].currentTime, 1);
-  }, 1000);
 });
