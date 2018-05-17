@@ -17,10 +17,27 @@ $(function() {
     return null;
   };
 
+  var debounce = function(action, idle) {
+    var last;
+    return function() {
+      var ctx = this, args = arguments;
+      clearTimeout(last);
+      last = setTimeout(function() {
+        action.apply(ctx, args);
+      }, idle);
+    };
+  };
+
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
     var $content = $('.g-content'),
       widthScale = $content.innerWidth() / options.width,
-      heightScale = $content.innerHeight() / options.height;
+      heightScale = $content.innerHeight() / options.height,
+      isScrolling = false,
+      scrollDebounce = debounce(function() {
+        isScrolling = false;
+      }, 800);
+
+    $audio[0].src = './data/' + options.title + '/audio.mp3';
 
     notation = new Notation({
       scale: widthScale > heightScale ? heightScale : widthScale,
@@ -33,8 +50,25 @@ $(function() {
       height: options.height,
       sum: options.sum
     });
-    $audio[0].src = './data/' + options.title + '/audio.mp3';
+
+    notation.currentPageIndex.subscribe(function(index) {
+      if (index !== undefined) {
+        var scrollTo = $('.page:eq(' + index + ')');
+
+        if (!isScrolling && scrollTo.length) {
+          $content.animate({
+            scrollTop: scrollTo.css('top')
+          }, 1000);
+        }
+      }
+    });
+
     ko.applyBindings(notation);
+
+    $content.on('scroll', function() {
+      isScrolling = true;
+      scrollDebounce();
+    });
   });
 
   $audio.on('play', function() {

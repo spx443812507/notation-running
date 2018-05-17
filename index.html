@@ -37,7 +37,7 @@
       <!-- /ko -->
       <div class="pages" data-bind="foreach: pages">
         <div class="page"
-             data-bind="attr: {id: 'page_' + id}, visible: $root.currentPageIndex() === $index(), style: style">
+             data-bind="attr: {id: 'page_' + $index()}, visible: $root.currentPageIndex() === $index(), style: style">
           <!-- ko foreach: sections-->
           <div class="section"
                data-bind="attr: {id: id}, style: style, css: {active: $root.currentSectionIndex() === index}, click: $root.changeSection"></div>
