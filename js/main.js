@@ -52,7 +52,9 @@ $(function() {
       sum: options.sum
     });
 
-    notation.currentPageIndex.subscribe(function(index) {
+    notation.currentSectionIndex.subscribe(function() {
+      var index = notation.currentPageIndex();
+
       if (index !== undefined) {
         var scrollTo = $('.page:eq(' + index + ')');
 
