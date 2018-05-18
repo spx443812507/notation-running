@@ -51,12 +51,12 @@ var Notation = (function() {
         var width = (sectionItem[1].eX - sectionItem[1].x) * self.options.scale,
           height = (sectionItem[1].eY - sectionItem[1].y) * self.options.scale,
           left = sectionItem[1].x * self.options.scale,
-          id = sectionItem[0][0],
+          sectionId = 'section_' + sectionItem[0][0],
           page = sectionItem[0][1],
           top = sectionItem[1].y * self.options.scale;
 
-        sectionMap['section_' + id] = {
-          id: 'section_' + id,
+        sectionMap[sectionId] = {
+          id: sectionId,
           page: page,
           width: width,
           height: height,
@@ -78,12 +78,12 @@ var Notation = (function() {
         var sectionId = 'section_' + noteItem[0][0].toString().split('.')[0],
           height = (noteItem[1].eY - noteItem[1].y) * self.options.scale,
           left = noteItem[1].x * self.options.scale,
-          id = noteItem[0][0],
+          noteId = 'note_' + noteItem[0][0],
           page = noteItem[0][1],
           top = noteItem[1].y * self.options.scale;
 
-        noteMap['note_' + id] = {
-          id: 'note_' + id,
+        noteMap[noteId] = {
+          id: noteId,
           page: page,
           width: 2,
           height: height,
