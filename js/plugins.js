@@ -26,12 +26,15 @@
           var note = notes[noteIndex],
             preNote = notes[noteIndex - 1];
 
-          $element = $element.css({
-            width: note.width,
-            height: note.height,
-            top: note.top,
-            left: (currentTime - preNote.time) / (note.time - preNote.time) * (note.left - preNote.left) + preNote.left
-          });
+          if (preNote) {
+            $element = $element.css({
+              width: note.width,
+              height: note.height,
+              top: note.top,
+              left: (currentTime - preNote.time) / (note.time - preNote.time) * (note.left - preNote.left) +
+              preNote.left
+            });
+          }
 
           moveNext(noteIndex);
         }

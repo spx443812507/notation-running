@@ -130,7 +130,7 @@ var Notation = (function() {
         if (!section) {
           section = $.extend(true, {}, sectionMap[note.sectionId], {
             notes: [note],
-            startTime: note.time
+            startTime: 0
           });
           sequences.push(section);
           return;
