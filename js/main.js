@@ -33,9 +33,9 @@ $(function() {
     var $content = $('.g-content'),
       widthScale = $content.innerWidth() / options.width,
       heightScale = $content.innerHeight() / options.height,
-      isScrolling = false,
-      scrollDebounce = debounce(function() {
-        isScrolling = false;
+      isSliding = false,
+      slideDebounce = debounce(function() {
+        isSliding = false;
       }, 800);
 
     $audio[0].src = './data/' + options.title + '/audio.mp3';
@@ -43,6 +43,7 @@ $(function() {
     notation = new Notation({
       scale: widthScale > heightScale ? heightScale : widthScale,
       speed: 1,
+      showNumber: 2,
       title: options.title,
       sections: options.sections,
       notes: options.notes,
@@ -52,25 +53,24 @@ $(function() {
       sum: options.sum
     });
 
-    notation.currentSectionIndex.subscribe(function() {
-      var index = notation.currentPageIndex();
-
-      if (index !== undefined) {
-        var scrollTo = $('.page:eq(' + index + ')');
-
-        if (!isScrolling && scrollTo.length) {
-          $content.animate({
-            scrollTop: scrollTo.css('top')
-          }, 500);
-        }
-      }
-    });
-
     ko.applyBindings(notation);
 
-    $content.on('scroll', function() {
-      isScrolling = true;
-      scrollDebounce();
+    var swiper = new Swiper('.swiper-container', {
+      mousewheel: true
+    });
+
+    swiper.on('slideChange', function() {
+      isSliding = true;
+      slideDebounce();
+    });
+
+    notation.currentSectionIndex.subscribe(function() {
+      var index = notation.currentRubbingIndex(),
+        rubbings = notation.rubbings();
+
+      if (index !== undefined && !isSliding) {
+        swiper.slideTo(rubbings[index].notationIndex - 1);
+      }
     });
   });
 

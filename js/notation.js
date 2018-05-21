@@ -8,24 +8,21 @@ var Notation = (function() {
     self.options = $.extend({}, defaultOptions, options);
     //乐谱标题
     self.title = ko.observable(self.options.title);
-    //乐谱页
-    self.pages = ko.observableArray();
+    //乐谱
+    self.notations = ko.observableArray();
+    //乐谱拓片
+    self.rubbings = ko.observableArray();
     //当前时间
     self.currentTime = ko.observable(0);
     //播放速度
     self.speed = ko.observable(1);
-    //是否显示小节滑块
-    self.showSectionCursor = ko.observable(false);
-    //是否显示音符光标
-    self.showNoteCursor = ko.observable(true);
-    //当前播放的页码
-    self.currentPageIndex = ko.observable();
+    //当前播放的拓片
+    self.currentRubbingIndex = ko.observable();
     //当前播放的小节
     self.currentSectionIndex = ko.observable();
-    //乐谱整体高度
-    self.notationHeight = ko.observable((self.options.sum * self.options.height * self.options.scale) + 'px');
     //乐谱整体宽度
-    self.notationWidth = ko.observable((self.options.width * self.options.scale) + 'px');
+    self.notationWidth =
+      ko.observable(Math.ceil((self.options.width * self.options.showNumber * self.options.scale)) + 'px');
     //乐谱图片
     self.images = ko.observableArray();
     //初始化
@@ -40,11 +37,8 @@ var Notation = (function() {
       sectionMap = {},
       noteMap = {},
       sequences = [],
-      pages = [];
-
-    for (var i = 0; i < self.options.sum; i++) {
-      self.images.push(i + 1);
-    }
+      rubbings = [],
+      notations = [];
 
     if (sections && sections.length) {
       $.each(sections, function(sectionIndex, sectionItem) {
@@ -174,27 +168,22 @@ var Notation = (function() {
     }
 
     $.each(sequences, function(index, item) {
-      var prePage = pages[pages.length - 1];
+      var preRubbing = rubbings[rubbings.length - 1];
 
       //小节播放序号
       item.index = index;
 
-      if (prePage && prePage.id === item.page) {
-        prePage.notes = prePage.notes.concat(item.notes);
-        prePage.sections.push(item);
+      if (preRubbing && preRubbing.page === item.page) {
+        preRubbing.notes = preRubbing.notes.concat(item.notes);
+        preRubbing.sections.push(item);
       } else {
-        pages.push({
-          id: item.page,
+        rubbings.push({
+          page: item.page,
           cursorStyle: {
             width: item.notes[0].width + 'px',
             height: item.notes[0].height + 'px',
             left: item.notes[0].left + 'px',
             top: item.notes[0].top + 'px'
-          },
-          style: {
-            top: ((item.page - 1) * self.options.height * self.options.scale) + 'px',
-            height: (self.options.height * self.options.scale) + 'px',
-            'background-image': 'url(./data/' + self.options.title + '/img/' + item.page + '.png)'
           },
           notes: [].concat(item.notes),
           sections: [item]
@@ -202,24 +191,54 @@ var Notation = (function() {
       }
     });
 
-    $.each(pages, function(i, page) {
-      var sections = page.sections;
+    for (var i = 0; i < Math.ceil((self.options.sum) / self.options.showNumber); i++) {
+      notations[i] = {
+        pages: []
+      };
+      for (var x = 0; x < self.options.showNumber; x++) {
+        var page = i * self.options.showNumber + x + 1;
 
-      page.startTime = sections[0].startTime;
-      page.endTime = sections[sections.length - 1].endTime;
+        if (page <= self.options.sum) {
+          notations[i].pages.push({
+            page: page,
+            rubbings: [],
+            style: {
+              width: (self.options.width * self.options.scale) + 'px',
+              'background-image': 'url(./data/' + self.options.title + '/img/' + page + '.png)'
+            }
+          });
+        }
+      }
+    }
+
+    $.each(rubbings, function(index, rubbing) {
+      var sections = rubbing.sections,
+        notationNumber = Math.ceil(rubbing.page / self.options.showNumber);
+
+      rubbing.index = index;
+      rubbing.notationIndex = notationNumber;
+      rubbing.startTime = sections[0].startTime;
+      rubbing.endTime = sections[sections.length - 1].endTime;
+
+      $.each(notations[notationNumber - 1].pages, function(i, page) {
+        if (page.page === rubbing.page) {
+          page.rubbings.push(rubbing);
+        }
+      });
     });
 
-    self.pages(pages);
+    self.rubbings(rubbings);
+    self.notations(notations);
 
     ko.computed(function() {
       var currentTime = self.currentTime();
 
-      $.each(pages, function(indexPage, page) {
-        if (page.startTime < currentTime && page.endTime > currentTime) {
-          self.currentPageIndex(indexPage);
+      $.each(rubbings, function(indexRubbing, rubbing) {
+        if (rubbing.startTime < currentTime && rubbing.endTime > currentTime) {
+          self.currentRubbingIndex(rubbing.index);
         }
 
-        $.each(page.sections, function(indexSection, section) {
+        $.each(rubbing.sections, function(indexSection, section) {
           if (section.startTime < currentTime && section.endTime > currentTime) {
             self.currentSectionIndex(section.index);
           }
