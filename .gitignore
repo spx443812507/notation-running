@@ -9,3 +9,4 @@ app/dist/js/
 release
 .bin/deploy.sh
 /package-lock.json
+/dist/

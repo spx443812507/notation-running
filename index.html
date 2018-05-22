@@ -11,10 +11,12 @@
   <link rel="apple-touch-icon" href="icon.png">
   <!-- Place favicon.ico in the root directory -->
 
+  <!-- build:css ./css/style.css -->
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/swiper.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <!-- endbuild -->
 </head>
 <body>
 <!--[if lte IE 9]>
@@ -55,12 +57,17 @@
     </div>
   </div>
 </div>
+<!-- build:js ./js/vendor.js -->
 <script src="js/vendor/modernizr-3.5.0.min.js"></script>
 <script src="js/vendor/jquery.min.js"></script>
 <script src="js/vendor/knockout.js"></script>
 <script src="js/vendor/swiper.min.js"></script>
+<!-- endbuild -->
+
+<!-- build:js ./js/app.js -->
 <script src="js/notation.js"></script>
 <script src="js/plugins.js"></script>
 <script src="js/main.js"></script>
+<!-- endbuild -->
 </body>
 </html>

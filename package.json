@@ -1,0 +1,25 @@
+{
+  "name": "Tune",
+  "version": "1.0.0",
+  "description": "Run notation cursor with excellent data",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:spx443812507/notation-running.git"
+  },
+  "author": "Siler_shen",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "./node_modules/.bin/grunt"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^2.2.1",
+    "grunt-contrib-uglify": "^3.0.1",
+    "grunt-hub": "^0.7.0",
+    "grunt-rev": "^0.1.0",
+    "grunt-usemin": "^3.1.1"
+  }
+}
