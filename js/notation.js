@@ -156,7 +156,7 @@ var Notation = (function() {
                 top: section.top + 'px'
               },
               sectionId: section.id,
-              time: note.time
+              time: note.time - 0.1
             });
           }
 
@@ -239,7 +239,7 @@ var Notation = (function() {
       var currentTime = self.currentTime();
 
       $.each(rubbings, function(indexRubbing, rubbing) {
-        if (rubbing.startTime < currentTime && rubbing.endTime > currentTime) {
+        if (rubbing.startTime <= currentTime && rubbing.endTime >= currentTime) {
           self.currentRubbingIndex(rubbing.index);
         }
 

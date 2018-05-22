@@ -64,18 +64,13 @@ html, body {
   position: absolute;
 }
 
-.section {
+.rubbing.active .section {
   background-color: #fffff0;
   opacity: .2;
 }
 
 .section.active {
   background-color: #af7b7e;
-}
-
-.note {
-  background-color: #af0a0d;
-  opacity: .1;
 }
 
 .cursor-note {

@@ -4,17 +4,13 @@
       var info = ko.unwrap(valueAccessor()),
         currentTime = info.currentTime,
         speed = info.speed,
-        playing = info.playing,
+        paused = info.paused,
         page = allBindings.get('page'),
         notes = page.notes,
         $element = $(element),
         noteIndex;
 
-      if (!playing) {
-        return $element.stop();
-      }
-
-      if (page.startTime < currentTime && page.endTime > currentTime) {
+      if (page.startTime <= currentTime && page.endTime >= currentTime) {
         $.each(notes, function(index, note) {
           if (note.time > currentTime) {
             noteIndex = index;
@@ -36,7 +32,11 @@
             });
           }
 
-          moveNext(noteIndex);
+          if (paused) {
+            return $element.stop();
+          } else {
+            moveNext(noteIndex);
+          }
         }
       }
 
@@ -80,14 +80,14 @@
     self.cursor = ko.observable({
       currentTime: 0,
       speed: 1,
-      playing: false
+      paused: true
     });
 
-    self.set = function(playing, currentTime, speed) {
+    self.set = function(paused, currentTime, speed) {
       self.cursor({
         currentTime: currentTime,
         speed: speed,
-        playing: playing
+        paused: paused
       });
     };
   };
