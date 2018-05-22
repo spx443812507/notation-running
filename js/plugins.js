@@ -4,13 +4,13 @@
       var info = ko.unwrap(valueAccessor()),
         currentTime = info.currentTime,
         speed = info.speed,
-        paused = info.paused,
+        playing = info.playing,
         page = allBindings.get('page'),
         notes = page.notes,
         $element = $(element),
         noteIndex;
 
-      if (page.startTime <= currentTime && page.endTime >= currentTime) {
+      if (page.startTime <= currentTime && page.endTime > currentTime) {
         $.each(notes, function(index, note) {
           if (note.time > currentTime) {
             noteIndex = index;
@@ -20,19 +20,22 @@
 
         if (noteIndex !== undefined) {
           var note = notes[noteIndex],
-            preNote = notes[noteIndex - 1];
+            preNote = notes[noteIndex - 1],
+            l = note.left;
 
+          //如果前面有音符，则根据比例计算出left值
           if (preNote) {
-            $element = $element.css({
-              width: note.width,
-              height: note.height,
-              top: note.top,
-              left: (currentTime - preNote.time) / (note.time - preNote.time) * (note.left - preNote.left) +
-              preNote.left
-            });
+            l = (currentTime - preNote.time) / (note.time - preNote.time) * (note.left - preNote.left) + preNote.left;
           }
 
-          if (paused) {
+          $element = $element.css({
+            width: note.width,
+            height: note.height,
+            top: note.top,
+            left: l
+          });
+
+          if (!playing) {
             return $element.stop();
           } else {
             moveNext(noteIndex);
@@ -80,14 +83,14 @@
     self.cursor = ko.observable({
       currentTime: 0,
       speed: 1,
-      paused: true
+      playing: false
     });
 
-    self.set = function(paused, currentTime, speed) {
+    self.set = function(playing, currentTime, speed) {
       self.cursor({
         currentTime: currentTime,
         speed: speed,
-        paused: paused
+        playing: playing
       });
     };
   };

@@ -1,6 +1,7 @@
 $(function() {
-  var $audio = $('#audio'),
-    notation;
+  var $audio = $('#audio')[0],
+    notation,
+    playing = false;
 
   //获取url中指定参数名的值
   $.queryString = function(name, url) {
@@ -23,7 +24,7 @@ $(function() {
       heightScale = $content.innerHeight() / options.height,
       isAutoSlide = false;
 
-    $audio[0].src = './data/' + options.title + '/audio.mp3';
+    $audio.src = './data/' + options.title + '/audio.mp3';
 
     notation = new Notation({
       scale: widthScale > heightScale ? heightScale : widthScale,
@@ -39,51 +40,58 @@ $(function() {
     });
 
     notation.changeSection = function(section) {
-      $audio[0].currentTime = section.startTime;
-      notation.currentTime($audio[0].currentTime);
-      window.cursor.set($audio[0].paused, $audio[0].currentTime, 1);
+      $audio.currentTime = section.startTime;
     };
 
     ko.applyBindings(notation);
 
     var swiper = new Swiper('.swiper-container', {
-      speed: 150,
+      speed: 200,
       mousewheel: true,
       keyboard: true
     });
 
     swiper.on('slideChange', function() {
       if (!isAutoSlide) {
-        $audio[0].pause();
+        $audio.pause();
       }
     });
 
     notation.currentSectionIndex.subscribe(function() {
       var index = notation.currentRubbingIndex(),
-        rubbings = notation.rubbings();
+        rubbings = notation.rubbings(),
+        slideToIndex;
 
-      if (index !== undefined && index !== swiper.realIndex) {
+      if (index === undefined) {
+        return;
+      }
+
+      slideToIndex = rubbings[index].notationIndex - 1;
+
+      if (slideToIndex !== swiper.realIndex) {
         isAutoSlide = true;
-        swiper.slideTo(rubbings[index].notationIndex - 1, 150);
+        swiper.slideTo(slideToIndex, 200);
         setTimeout(function() {
           isAutoSlide = false;
-        }, 150);
+        }, 200);
       }
     });
   });
 
-  $audio.on('play', function() {
-    window.cursor.set($audio[0].paused, $audio[0].currentTime, 1);
-  });
+  $audio.onplay = function() {
+    playing = true;
+    window.cursor.set(playing, $audio.currentTime, 1);
+  };
 
-  $audio.on('pause', function audioEvent() {
-    window.cursor.set($audio[0].paused, $audio[0].currentTime, 1);
-  });
+  $audio.onpause = function() {
+    playing = false;
+    window.cursor.set(playing, $audio.currentTime, 1);
+  };
 
-  $audio.on('timeupdate', function() {
-    notation.currentTime($audio[0].currentTime);
-    window.cursor.set($audio[0].paused, $audio[0].currentTime, 1);
-  });
+  $audio.ontimeupdate = function() {
+    notation.currentTime($audio.currentTime);
+    window.cursor.set(playing, $audio.currentTime, 1);
+  };
 
   //监听页面变化
   window.addEventListener('orientationchange', function() {
