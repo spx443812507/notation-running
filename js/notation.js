@@ -7,7 +7,7 @@ var Notation = (function() {
 
     self.options = $.extend({}, defaultOptions, options);
     //乐谱标题
-    self.title = ko.observable(self.options.title);
+    self.title = ko.observable();
     //乐谱
     self.notations = ko.observableArray();
     //乐谱拓片
@@ -21,8 +21,7 @@ var Notation = (function() {
     //当前播放的小节
     self.currentSectionIndex = ko.observable();
     //乐谱整体宽度
-    self.notationWidth =
-      ko.observable(Math.ceil((self.options.width * self.options.showNumber * self.options.scale)) + 'px');
+    self.notationWidth = ko.observable();
     //乐谱图片
     self.images = ko.observableArray();
     //初始化
@@ -39,6 +38,9 @@ var Notation = (function() {
       sequences = [],
       rubbings = [],
       notations = [];
+
+    self.title(self.options.title);
+    self.notationWidth(Math.ceil((self.options.width * self.options.showNumber * self.options.scale)) + 'px');
 
     if (sections && sections.length) {
       $.each(sections, function(sectionIndex, sectionItem) {
@@ -126,8 +128,8 @@ var Notation = (function() {
             notes: [note],
             startTime: 0
           });
-          sequences.push(section);
-          return;
+
+          return sequences.push(section);
         }
 
         if (section.id === note.sectionId) {
