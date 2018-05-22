@@ -20,8 +20,10 @@ var Notation = (function() {
     self.currentRubbingIndex = ko.observable();
     //当前播放的小节
     self.currentSectionIndex = ko.observable();
-    //乐谱整体宽度
+    //乐谱宽度
     self.notationWidth = ko.observable();
+    //乐谱高度
+    self.notationHeight = ko.observable();
     //乐谱图片
     self.images = ko.observableArray();
     //初始化
@@ -41,6 +43,7 @@ var Notation = (function() {
 
     self.title(self.options.title);
     self.notationWidth(Math.ceil((self.options.width * self.options.showNumber * self.options.scale)) + 'px');
+    self.notationHeight(Math.ceil((self.options.height * self.options.scale)) + 'px');
 
     if (sections && sections.length) {
       $.each(sections, function(sectionIndex, sectionItem) {

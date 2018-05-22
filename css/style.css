@@ -33,8 +33,10 @@ html, body {
 
 .g-content {
   position: absolute;
+  display: flex;
+  align-items: center;
   width: 100%;
-  top: 32px;
+  top: 40px;
   bottom: 0;
   overflow: auto;
   -webkit-overflow-scrolling: touch;

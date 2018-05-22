@@ -56,6 +56,7 @@ $(function() {
     ko.applyBindings(notation);
 
     var swiper = new Swiper('.swiper-container', {
+      speed: 200,
       mousewheel: true
     });
 
