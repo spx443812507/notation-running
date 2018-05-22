@@ -43,7 +43,7 @@ $(function() {
     notation = new Notation({
       scale: widthScale > heightScale ? heightScale : widthScale,
       speed: 1,
-      showNumber: 2,
+      showNumber: widthScale >= heightScale * 2 ? 2 : 1,
       title: options.title,
       sections: options.sections,
       notes: options.notes,

@@ -5,13 +5,13 @@
 
 module.exports = function(grunt) {
   grunt.initConfig({
-    paths: {},
+    clean: ['dist'],
     uglify: {
       options: {
         report: 'none',
         beautify: true,
-        compress: false,
-        mangle: false,
+        compress: true,
+        mangle: true,
         preserveComments: false
       },
       meeting: {
@@ -118,6 +118,7 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -126,6 +127,7 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', [
+    'clean',
     'uglify',
     'copy',
     'cssmin',
