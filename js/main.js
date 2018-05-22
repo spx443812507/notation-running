@@ -93,4 +93,14 @@ $(function() {
   window.setInterval(function() {
     window.cursor.set(isPlaying, $audio[0].currentTime, 1);
   }, 1000);
+  //监听页面变化
+  window.addEventListener('orientationchange', function() {
+    window.location.reload();
+  });
+  //防止页面从缓存加载
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
 });
