@@ -57,6 +57,7 @@ $(function() {
     swiper.on('slideChange', function() {
       if (!isAutoSlide) {
         $audio.pause();
+        window.cursor.set(playing, $audio.currentTime, 1);
       }
     });
 
@@ -68,6 +69,8 @@ $(function() {
       if (index === undefined) {
         return;
       }
+
+      window.cursor.set(playing, $audio.currentTime, 1);
 
       slideToIndex = rubbings[index].notationIndex - 1;
 
@@ -96,20 +99,13 @@ $(function() {
     window.cursor.set(playing, $audio.currentTime, 1);
   };
 
-  $audio.onseeking = function() {
-    seeking = true;
-  };
-
   $audio.onseeked = function() {
-    seeking = false;
+    window.cursor.set(playing, $audio.currentTime, 1);
   };
 
   $audio.ontimeupdate = function() {
-    if (!seeking) {
-      notation.currentTime($audio.currentTime);
-      window.cursor.set(playing, $audio.currentTime, 1);
-      document.getElementById('currentTime').innerHTML = $audio.currentTime;
-    }
+    notation.currentTime($audio.currentTime);
+    document.getElementById('currentTime').innerHTML = $audio.currentTime;
   };
 
   //监听页面变化
