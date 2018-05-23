@@ -10,8 +10,8 @@ module.exports = function(grunt) {
       options: {
         report: 'none',
         beautify: true,
-        compress: false,
-        mangle: false,
+        compress: true,
+        mangle: true,
         preserveComments: false
       },
       meeting: {

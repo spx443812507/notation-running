@@ -79,8 +79,9 @@ $(function() {
     });
   });
 
-  $audio.onplaying = function() {
+  $audio.onplay = function() {
     playing = true;
+    notation.currentTime($audio.currentTime);
     window.cursor.set(playing, $audio.currentTime, 1);
   };
 
