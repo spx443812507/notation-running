@@ -10,7 +10,9 @@
         $element = $(element),
         noteIndex;
 
-      if (page.startTime <= currentTime && page.endTime > currentTime) {
+      $element.stop();
+
+      if (page.startTime < currentTime && page.endTime > currentTime) {
         $.each(notes, function(index, note) {
           if (note.time > currentTime) {
             noteIndex = index;
@@ -35,9 +37,7 @@
             left: l
           });
 
-          if (!playing) {
-            return $element.stop();
-          } else {
+          if (playing) {
             moveNext(noteIndex);
           }
         }

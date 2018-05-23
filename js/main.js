@@ -40,7 +40,8 @@ $(function() {
     });
 
     notation.changeSection = function(section) {
-      $audio.currentTime = section.startTime;
+      $audio.currentTime = section.startTime + 0.00005;
+      window.cursor.set(playing, $audio.currentTime, 1);
     };
 
     ko.applyBindings(notation);
@@ -78,8 +79,13 @@ $(function() {
     });
   });
 
-  $audio.onplay = function() {
+  $audio.onplaying = function() {
     playing = true;
+    window.cursor.set(playing, $audio.currentTime, 1);
+  };
+
+  $audio.onwaiting = function() {
+    playing = false;
     window.cursor.set(playing, $audio.currentTime, 1);
   };
 

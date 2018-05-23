@@ -156,11 +156,11 @@ var Notation = (function() {
                 top: section.top + 'px'
               },
               sectionId: section.id,
-              time: note.time - 0.000001
+              time: note.time - 0.000005
             });
           }
 
-          section.endTime = note.time - 0.000001;
+          section.endTime = note.time - 0.000005;
 
           section = $.extend(true, {}, sectionMap[note.sectionId], {
             notes: [note],
@@ -239,12 +239,12 @@ var Notation = (function() {
       var currentTime = self.currentTime();
 
       $.each(rubbings, function(indexRubbing, rubbing) {
-        if (rubbing.startTime <= currentTime && rubbing.endTime > currentTime) {
+        if (rubbing.startTime < currentTime && rubbing.endTime > currentTime) {
           self.currentRubbingIndex(rubbing.index);
         }
 
         $.each(rubbing.sections, function(indexSection, section) {
-          if (section.startTime <= currentTime && section.endTime > currentTime) {
+          if (section.startTime < currentTime && section.endTime > currentTime) {
             self.currentSectionIndex(section.index);
           }
         });
