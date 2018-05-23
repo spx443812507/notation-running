@@ -1,7 +1,8 @@
 $(function() {
   var $audio = $('#audio')[0],
     notation,
-    playing = false;
+    playing = false,
+    seeking;
 
   //获取url中指定参数名的值
   $.queryString = function(name, url) {
@@ -95,13 +96,20 @@ $(function() {
     window.cursor.set(playing, $audio.currentTime, 1);
   };
 
+  $audio.onseeking = function() {
+    seeking = true;
+  };
+
   $audio.onseeked = function() {
-    window.cursor.set(playing, $audio.currentTime, 1);
+    seeking = false;
   };
 
   $audio.ontimeupdate = function() {
-    notation.currentTime($audio.currentTime);
-    window.cursor.set(playing, $audio.currentTime, 1);
+    if (!seeking) {
+      notation.currentTime($audio.currentTime);
+      window.cursor.set(playing, $audio.currentTime, 1);
+      document.getElementById('currentTime').innerHTML = $audio.currentTime;
+    }
   };
 
   //监听页面变化
