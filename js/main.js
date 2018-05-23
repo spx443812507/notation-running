@@ -40,8 +40,9 @@ $(function() {
     });
 
     notation.changeSection = function(section) {
-      $audio.currentTime = section.startTime + 0.00005;
-      window.cursor.set(playing, $audio.currentTime, 1);
+      if ($audio.readyState >= 4) {
+        $audio.currentTime = section.startTime + 0.00005;
+      }
     };
 
     ko.applyBindings(notation);
@@ -79,9 +80,8 @@ $(function() {
     });
   });
 
-  $audio.onplay = function() {
+  $audio.onplaying = function() {
     playing = true;
-    notation.currentTime($audio.currentTime);
     window.cursor.set(playing, $audio.currentTime, 1);
   };
 
@@ -92,6 +92,10 @@ $(function() {
 
   $audio.onpause = function() {
     playing = false;
+    window.cursor.set(playing, $audio.currentTime, 1);
+  };
+
+  $audio.onseeked = function() {
     window.cursor.set(playing, $audio.currentTime, 1);
   };
 

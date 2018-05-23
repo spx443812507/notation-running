@@ -73,7 +73,7 @@ html, body {
 }
 
 .rubbing.active {
-  z-index: 2;
+  z-index: 99;
 }
 
 .rubbing.active .section {
