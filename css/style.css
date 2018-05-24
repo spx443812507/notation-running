@@ -83,6 +83,6 @@ html, body {
 .cursor-note {
   width: 2px;
   height: 100%;
-  background-color: #EE5757;
+  background-color: #EE0000;
   z-index: 2;
 }

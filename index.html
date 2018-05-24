@@ -36,7 +36,6 @@
     </div>
   </div>
   <div class="g-content">
-    <div id="currentTime" style="position: absolute; top: 0px; left: 40%; z-index: 99;"></div>
     <div class="swiper-container" data-bind="style: {width: notationWidth, height: notationHeight}">
       <div class="notation-wrapper swiper-wrapper" data-bind="foreach: notations">
         <div class="swiper-slide" data-bind="foreach: pages">
@@ -57,10 +56,8 @@
       </div>
       <div class="swiper-pagination"></div>
     </div>
-    <!-- ko if: hasArrow-->
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-    <!-- /ko -->
+    <div class="swiper-button-next" data-bind="visible: hasArrow" style="display: none"></div>
+    <div class="swiper-button-prev" data-bind="visible: hasArrow" style="display: none"></div>
   </div>
 </div>
 <!-- build:js ./js/vendor.js -->

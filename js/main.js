@@ -4,7 +4,9 @@ $(function() {
     isMobile = !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i),
     playing = function() {
       return $audio
-        && $audio.currentTime > 0
+        && $audio.buffered.length > 0
+        && $audio.currentTime > $audio.buffered.start(0)
+        && $audio.currentTime <= $audio.buffered.end($audio.buffered.length - 1)
         && !$audio.paused
         && !$audio.ended
         && $audio.readyState > 2;
@@ -34,7 +36,7 @@ $(function() {
     notation = new Notation({
       scale: widthScale > heightScale ? heightScale : widthScale,
       speed: 1,
-      showNumber: widthScale >= heightScale * 2 ? 2 : 1,
+      showNumber: ($content.innerWidth() / $content.innerHeight()) > 1.3 ? 2 : 1,
       title: options.title,
       sections: options.sections,
       notes: options.notes,
@@ -47,7 +49,11 @@ $(function() {
     notation.hasArrow = ko.observable(!isMobile);
 
     notation.changeSection = function(section) {
-      $audio.currentTime = section.startTime + 0.00005;
+      if (section.notes && section.notes.length) {
+        $audio.currentTime = section.notes[0].time + 0.00005;
+        notation.currentTime($audio.currentTime);
+        window.cursor.set(playing(), $audio.currentTime, 1);
+      }
     };
 
     ko.applyBindings(notation);
@@ -58,7 +64,12 @@ $(function() {
       keyboard: true,
       pagination: {
         el: '.swiper-pagination',
-        type: 'fraction'
+        type: 'fraction',
+        renderFraction: function(currentClass, totalClass) {
+          return '- <span class="' + currentClass + '"></span>' +
+            ' of ' +
+            '<span class="' + totalClass + '"></span> -';
+        }
       },
       navigation: {
         nextEl: '.swiper-button-next',
@@ -74,6 +85,9 @@ $(function() {
 
     ko.computed(function() {
       var swiperIndex = notation.currentSwiperIndex();
+      var sectionIndex = notation.currentSectionIndex();
+
+      console.log('当前播放小节序号' + sectionIndex);
 
       if (swiperIndex === undefined) {
         return;
@@ -92,7 +106,6 @@ $(function() {
   $audio.ontimeupdate = function() {
     notation.currentTime($audio.currentTime);
     window.cursor.set(playing(), $audio.currentTime, 1);
-    document.getElementById('currentTime').innerHTML = $audio.currentTime;
   };
 
   //监听页面变化
