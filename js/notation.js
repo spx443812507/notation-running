@@ -207,9 +207,9 @@ var Notation = (function() {
           page: item.page,
           cursorStyle: {
             width: item.notes[0].width + 'px',
-            height: item.notes[0].height + 40 + 'px',
+            height: item.notes[0].height + 20 + 'px',
             left: item.notes[0].left + 'px',
-            top: item.notes[0].top - 20 + 'px'
+            top: item.notes[0].top - 10 + 'px'
           },
           notes: [].concat(item.notes),
           sections: [item]

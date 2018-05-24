@@ -32,8 +32,8 @@
 
           $element = $element.css({
             width: note.width,
-            height: note.height + 40,
-            top: note.top - 20,
+            height: note.height + 20,
+            top: note.top - 10,
             left: l
           });
 
@@ -49,8 +49,8 @@
 
         $element = $element.stop().animate({
           width: note.width,
-          height: note.height + 40,
-          top: note.top - 20,
+          height: note.height + 20,
+          top: note.top - 10,
           left: note.left
         }, (note.time - currentTime) * 1000 * speed, 'linear', function() {
           currentTime = note.time;
@@ -61,8 +61,8 @@
             if (note.sectionId !== nextNote.sectionId) {
               $element.css({
                 width: nextNote.style.width,
-                height: nextNote.style.height + 40,
-                top: nextNote.style.top - 20,
+                height: nextNote.style.height + 20,
+                top: nextNote.style.top - 10,
                 left: nextNote.style.left
               });
             }
