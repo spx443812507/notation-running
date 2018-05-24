@@ -1,6 +1,7 @@
 $(function() {
   var $audio = $('#audio')[0],
     notation,
+    isMobile = !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i),
     playing = function() {
       return $audio
         && $audio.currentTime > 0
@@ -43,6 +44,8 @@ $(function() {
       sum: options.sum
     });
 
+    notation.hasArrow = ko.observable(!isMobile);
+
     notation.changeSection = function(section) {
       $audio.currentTime = section.startTime + 0.00005;
     };
@@ -52,7 +55,15 @@ $(function() {
     var swiper = new Swiper('.swiper-container', {
       speed: 200,
       mousewheel: true,
-      keyboard: true
+      keyboard: true,
+      pagination: {
+        el: '.swiper-pagination',
+        type: 'fraction'
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+      }
     });
 
     swiper.on('slideChange', function() {
@@ -93,5 +104,9 @@ $(function() {
     if (event.persisted) {
       window.location.reload();
     }
+  });
+
+  window.addEventListener('resize', function() {
+    window.location.reload();
   });
 });
