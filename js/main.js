@@ -119,7 +119,13 @@ $(function() {
     }
   });
 
-  window.addEventListener('resize', function() {
-    window.location.reload();
+  window.addEventListener('orientationchange', function() {
+    switch (window.orientation) {
+      case -90 || 90:
+        window.location.reload();
+        break;
+      default:
+        break;
+    }
   });
 });
