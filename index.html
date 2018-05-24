@@ -40,20 +40,18 @@
     <div class="swiper-container" data-bind="style: {width: notationWidth, height: notationHeight}">
       <div class="notation-wrapper swiper-wrapper" data-bind="foreach: notations">
         <div class="swiper-slide" data-bind="foreach: pages">
-          <div class="page" data-bind="foreach: rubbings, style: style">
-            <div class="rubbing"
-                 data-bind="attr: {id: 'page_' + page}, css: {active: $root.currentRubbingIndex() === index}">
-              <!-- ko foreach: sections-->
-              <div class="section"
-                   data-bind="attr: {id: id}, style: style, css: {active: $root.currentSectionIndex() === index}, click: $root.changeSection"></div>
-              <!-- ko foreach: notes-->
-              <div class="note" data-bind="attr: {id: id}, style: style"></div>
-              <!-- /ko -->
-              <!-- /ko -->
+          <div class="page"
+               data-bind="foreach: rubbings, attr: {id: 'page_' + page}, css: {active: $root.currentPageIndex() === page}, style: style">
+            <!-- ko foreach: sections-->
+            <div class="section"
+                 data-bind="attr: {id: id}, style: style, css: {active: $root.currentSectionIndex() === index}, click: $root.changeSection"></div>
+            <!-- ko foreach: notes-->
+            <div class="note" data-bind="attr: {id: id}, style: style"></div>
+            <!-- /ko -->
+            <!-- /ko -->
 
-              <div data-bind="visible: $root.currentRubbingIndex() === index,
+            <div data-bind="visible: $root.currentRubbingIndex() === index,
                 component: {name: 'notation-cursor', params: {cursor: cursor.cursor, cursorStyle: cursorStyle, page: $data}}"></div>
-            </div>
           </div>
         </div>
       </div>

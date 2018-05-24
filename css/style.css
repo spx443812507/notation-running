@@ -64,24 +64,12 @@ html, body {
   position: absolute;
 }
 
-.rubbing {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-.rubbing.active {
-  z-index: 99;
-}
-
-.rubbing.active .section {
+.page.active .section {
   background-color: #fffff0;
   opacity: .2;
 }
 
-.rubbing.active .section.active {
+.page.active .section.active {
   background-color: #af7b7e;
   opacity: .2;
   z-index: 2;

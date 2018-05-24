@@ -1,7 +1,13 @@
 $(function() {
   var $audio = $('#audio')[0],
     notation,
-    playing = false;
+    playing = function() {
+      return $audio
+        && $audio.currentTime > 0
+        && !$audio.paused
+        && !$audio.ended
+        && $audio.readyState > 2;
+    };
 
   //获取url中指定参数名的值
   $.queryString = function(name, url) {
@@ -38,9 +44,7 @@ $(function() {
     });
 
     notation.changeSection = function(section) {
-      if ($audio.readyState >= 4) {
-        $audio.currentTime = section.startTime + 0.00005;
-      }
+      $audio.currentTime = section.startTime + 0.00005;
     };
 
     ko.applyBindings(notation);
@@ -57,20 +61,16 @@ $(function() {
       }
     });
 
-    notation.currentSectionIndex.subscribe(function() {
-      var index = notation.currentRubbingIndex(),
-        rubbings = notation.rubbings(),
-        slideToIndex;
+    ko.computed(function() {
+      var swiperIndex = notation.currentSwiperIndex();
 
-      if (index === undefined) {
+      if (swiperIndex === undefined) {
         return;
       }
 
-      slideToIndex = rubbings[index].notationIndex - 1;
-
-      if (slideToIndex !== swiper.realIndex) {
+      if (swiperIndex !== swiper.realIndex) {
         isAutoSlide = true;
-        swiper.slideTo(slideToIndex, 200);
+        swiper.slideTo(swiperIndex, 200);
         setTimeout(function() {
           isAutoSlide = false;
         }, 200);
@@ -78,28 +78,9 @@ $(function() {
     });
   });
 
-  $audio.onplaying = function() {
-    playing = true;
-    window.cursor.set(playing, $audio.currentTime, 1);
-  };
-
-  $audio.onwaiting = function() {
-    playing = false;
-    window.cursor.set(playing, $audio.currentTime, 1);
-  };
-
-  $audio.onpause = function() {
-    playing = false;
-    window.cursor.set(playing, $audio.currentTime, 1);
-  };
-
-  $audio.onseeked = function() {
-    window.cursor.set(playing, $audio.currentTime, 1);
-  };
-
   $audio.ontimeupdate = function() {
     notation.currentTime($audio.currentTime);
-    window.cursor.set(playing, $audio.currentTime, 1);
+    window.cursor.set(playing(), $audio.currentTime, 1);
     document.getElementById('currentTime').innerHTML = $audio.currentTime;
   };
 

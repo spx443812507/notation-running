@@ -13,9 +13,13 @@ var Notation = (function() {
     //乐谱拓片
     self.rubbings = ko.observableArray();
     //当前时间
-    self.currentTime = ko.observable(0);
+    self.currentTime = ko.observable(0.000001);
     //播放速度
     self.speed = ko.observable(1);
+    //当前播放的swiper顺序
+    self.currentSwiperIndex = ko.observable();
+    //当前播放的页面
+    self.currentPageIndex = ko.observable();
     //当前播放的拓片
     self.currentRubbingIndex = ko.observable();
     //当前播放的小节
@@ -192,6 +196,8 @@ var Notation = (function() {
 
       //小节播放序号
       item.index = index;
+      //翻转层级
+      item.style['z-index'] = sequences.length - index;
 
       if (preRubbing && preRubbing.page === item.page) {
         preRubbing.notes = preRubbing.notes.concat(item.notes);
@@ -236,7 +242,7 @@ var Notation = (function() {
         notationNumber = Math.ceil(rubbing.page / self.options.showNumber);
 
       rubbing.index = index;
-      rubbing.notationIndex = notationNumber;
+      rubbing.notationNumber = notationNumber;
       rubbing.startTime = sections[0].startTime;
       rubbing.endTime = sections[sections.length - 1].endTime;
 
@@ -256,6 +262,8 @@ var Notation = (function() {
       $.each(rubbings, function(indexRubbing, rubbing) {
         if (rubbing.startTime < currentTime && rubbing.endTime > currentTime) {
           self.currentRubbingIndex(rubbing.index);
+          self.currentPageIndex(rubbing.page);
+          self.currentSwiperIndex(rubbing.notationNumber - 1);
         }
 
         $.each(rubbing.sections, function(indexSection, section) {
