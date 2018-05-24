@@ -1,8 +1,7 @@
 $(function() {
   var $audio = $('#audio')[0],
     notation,
-    playing = false,
-    seeking;
+    playing = false;
 
   //获取url中指定参数名的值
   $.queryString = function(name, url) {
@@ -24,8 +23,6 @@ $(function() {
       widthScale = $content.innerWidth() / options.width,
       heightScale = $content.innerHeight() / options.height,
       isAutoSlide = false;
-
-    $audio.src = './data/' + options.title + '/audio.mp3';
 
     notation = new Notation({
       scale: widthScale > heightScale ? heightScale : widthScale,
@@ -57,7 +54,6 @@ $(function() {
     swiper.on('slideChange', function() {
       if (!isAutoSlide) {
         $audio.pause();
-        window.cursor.set(playing, $audio.currentTime, 1);
       }
     });
 
@@ -69,8 +65,6 @@ $(function() {
       if (index === undefined) {
         return;
       }
-
-      window.cursor.set(playing, $audio.currentTime, 1);
 
       slideToIndex = rubbings[index].notationIndex - 1;
 
@@ -105,6 +99,7 @@ $(function() {
 
   $audio.ontimeupdate = function() {
     notation.currentTime($audio.currentTime);
+    window.cursor.set(playing, $audio.currentTime, 1);
     document.getElementById('currentTime').innerHTML = $audio.currentTime;
   };
 
