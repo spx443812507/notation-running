@@ -2,7 +2,6 @@ $(function() {
   var $audio = $('#audio')[0],
     isMobile = !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i),
     notation,
-    seeking = false,
     seekTimer;
 
   //获取url中指定参数名的值
@@ -20,11 +19,19 @@ $(function() {
     return null;
   };
 
+  var isBuffered = function(currentTime) {
+    for (i = 0; i < $audio.buffered.length; i++) {
+      if (currentTime > $audio.buffered.start(i) && currentTime < $audio.buffered.end(i)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   var playing = function() {
     return $audio
-      && $audio.buffered.length > 0
-      && $audio.currentTime > $audio.buffered.start(0)
-      && $audio.currentTime <= $audio.buffered.end($audio.buffered.length - 1)
+      && isBuffered($audio.currentTime)
       && !$audio.paused
       && !$audio.ended
       && $audio.readyState > 2;
@@ -54,17 +61,20 @@ $(function() {
     notation.changeSection = function(section) {
       var seekTo;
 
-      window.clearTimeout(seekTimer);
+      window.clearInterval(seekTimer);
 
       if (section.notes && section.notes.length) {
-        seeking = true;
         seekTo = section.notes[0].time + 0.00005;
         $audio.currentTime = seekTo;
         notation.currentTime(seekTo);
         window.cursor.set(playing(), seekTo, 1);
-        seekTimer = window.setTimeout(function() {
-          seeking = false;
-        }, 250);
+        $audio.pause();
+        seekTimer = window.setInterval(function() {
+          if (isBuffered(seekTo)) {
+            window.clearInterval(seekTimer);
+            $audio.play();
+          }
+        }, 200);
       }
     };
 
@@ -116,10 +126,8 @@ $(function() {
   });
 
   $audio.ontimeupdate = function() {
-    if (!seeking) {
-      notation.currentTime($audio.currentTime);
-      window.cursor.set(playing(), $audio.currentTime, 1);
-    }
+    notation.currentTime($audio.currentTime);
+    window.cursor.set(playing(), $audio.currentTime, 1);
   };
 
   //监听页面变化
