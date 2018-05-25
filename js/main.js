@@ -60,10 +60,9 @@ $(function() {
         seeking = true;
         seekTo = section.notes[0].time + 0.00005;
         $audio.currentTime = seekTo;
-
+        notation.currentTime(seekTo);
+        window.cursor.set(playing(), seekTo, 1);
         seekTimer = window.setTimeout(function() {
-          notation.currentTime(seekTo);
-          window.cursor.set(playing(), seekTo, 1);
           seeking = false;
         }, 250);
       }
