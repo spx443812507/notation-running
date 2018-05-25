@@ -22,7 +22,9 @@ $(function() {
 
   var playing = function() {
     return $audio
-      && $audio.currentTime > 0
+      && $audio.buffered.length > 0
+      && $audio.currentTime > $audio.buffered.start(0)
+      && $audio.currentTime <= $audio.buffered.end($audio.buffered.length - 1)
       && !$audio.paused
       && !$audio.ended
       && $audio.readyState > 2;
@@ -58,12 +60,12 @@ $(function() {
         seeking = true;
         seekTo = section.notes[0].time + 0.00005;
         $audio.currentTime = seekTo;
-        notation.currentTime(seekTo);
-        window.cursor.set(playing(), seekTo, 1);
 
         seekTimer = window.setTimeout(function() {
+          notation.currentTime(seekTo);
+          window.cursor.set(playing(), seekTo, 1);
           seeking = false;
-        }, 500);
+        }, 250);
       }
     };
 
