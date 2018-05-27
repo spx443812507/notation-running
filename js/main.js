@@ -86,12 +86,7 @@ $(function() {
       keyboard: true,
       pagination: {
         el: '.swiper-pagination',
-        type: 'fraction',
-        renderFraction: function(currentClass, totalClass) {
-          return '- <span class="' + currentClass + '"></span>' +
-            ' of ' +
-            '<span class="' + totalClass + '"></span> -';
-        }
+        type: 'progressbar'
       },
       navigation: {
         nextEl: '.swiper-button-next',
