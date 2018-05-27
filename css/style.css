@@ -65,7 +65,6 @@ html, body {
 }
 
 .page.active .section {
-  background-color: #fffff0;
   opacity: .2;
 }
 
