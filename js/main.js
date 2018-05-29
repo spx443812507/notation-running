@@ -39,14 +39,15 @@ $(function() {
 
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
     var $content = $('.g-content'),
-      widthScale = $content.innerWidth() / options.width,
-      heightScale = $content.innerHeight() / options.height,
-      isAutoSlide = false;
+      isAutoSlide = false,
+      showNumber = ($content.innerWidth() / $content.innerHeight()) > 1.3 ? 2 : 1,
+      widthScale = $content.innerWidth() / (options.width * showNumber),
+      heightScale = $content.innerHeight() / options.height;
 
     notation = new Notation({
       scale: widthScale > heightScale ? heightScale : widthScale,
       speed: 1,
-      showNumber: ($content.innerWidth() / $content.innerHeight()) > 1.3 ? 2 : 1,
+      showNumber: showNumber,
       title: options.title,
       sections: options.sections,
       notes: options.notes,
@@ -139,6 +140,12 @@ $(function() {
         break;
       default:
         break;
+    }
+  });
+
+  window.addEventListener('resize', function() {
+    if (window.innerHeight == screen.height) {
+      window.location.reload();
     }
   });
 });
