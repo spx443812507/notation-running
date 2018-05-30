@@ -144,8 +144,19 @@ $(function() {
   });
 
   window.addEventListener('resize', function() {
-    if (window.innerHeight == screen.height) {
-      window.location.reload();
+    var explorer = window.navigator.userAgent.toLowerCase();
+    if (explorer.indexOf('chrome') > 0) {//webkit
+      if (document.body.scrollHeight === window.screen.height && document.body.scrollWidth === window.screen.width) {
+        window.location.reload();
+      } else {
+        console.log('不全屏');
+      }
+    } else {//IE 9+  fireFox
+      if (window.outerHeight === window.screen.height && window.outerWidth === window.screen.width) {
+        window.location.reload();
+      } else {
+        console.log('不全屏');
+      }
     }
   });
 });
