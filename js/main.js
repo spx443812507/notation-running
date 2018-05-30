@@ -79,6 +79,10 @@ $(function() {
       }
     };
 
+    notation.refresh = function() {
+      window.location.reload();
+    };
+
     ko.applyBindings(notation);
 
     var swiper = new Swiper('.swiper-container', {

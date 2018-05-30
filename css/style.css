@@ -27,8 +27,21 @@ html, body {
   width: 100%;
 }
 
+.g-header .audio {
+  display: inline;
+  width: calc(100% - 32px);
+  float: left;
+}
+
 .g-header audio {
   width: 100%;
+}
+
+.g-header img {
+  width: 32px;
+  height: 32px;
+  float: left;
+  cursor: pointer;
 }
 
 .g-content {
