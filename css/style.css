@@ -27,13 +27,13 @@ html, body {
   width: 100%;
 }
 
-.g-header .audio {
+.g-header .media {
   display: inline;
   width: 100%;
   float: left;
 }
 
-.g-header audio {
+.g-header audio, .g-header video {
   width: 100%;
 }
 
@@ -49,7 +49,6 @@ html, body {
   display: flex;
   align-items: center;
   width: 100%;
-  top: 40px;
   bottom: 0;
   overflow: auto;
   -webkit-overflow-scrolling: touch;

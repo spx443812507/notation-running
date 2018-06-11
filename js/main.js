@@ -1,9 +1,4 @@
 $(function() {
-  var $audio = $('#audio')[0],
-    isMobile = !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i),
-    notation,
-    seekTimer;
-
   //获取url中指定参数名的值
   $.queryString = function(name, url) {
     var queryUrl = url || document.URL;
@@ -19,30 +14,56 @@ $(function() {
     return null;
   };
 
-  var isBuffered = function(currentTime) {
-    for (i = 0; i < $audio.buffered.length; i++) {
-      if (currentTime > $audio.buffered.start(i) && currentTime < $audio.buffered.end(i)) {
-        return true;
-      }
-    }
-
-    return false;
-  };
-
-  var playing = function() {
-    return $audio
-      && isBuffered($audio.currentTime)
-      && !$audio.paused
-      && !$audio.ended
-      && $audio.readyState > 2;
-  };
-
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
-    var $content = $('.g-content'),
+    var isMobile = !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i),
+      type = $.queryString('type') || 'audio',
       isAutoSlide = false,
-      showNumber = ($content.innerWidth() / $content.innerHeight()) > 1.3 ? 2 : 1,
-      widthScale = $content.innerWidth() / (options.width * showNumber),
-      heightScale = $content.innerHeight() / options.height;
+      $media = document.createElement(type),
+      mediaHeight,
+      notation,
+      seekTimer,
+      $content,
+      showNumber,
+      widthScale,
+      heightScale;
+
+    var isBuffered = function(currentTime) {
+      for (i = 0; i < $media.buffered.length; i++) {
+        if (currentTime > $media.buffered.start(i) && currentTime < $media.buffered.end(i)) {
+          return true;
+        }
+      }
+
+      return false;
+    };
+
+    var playing = function() {
+      return $media
+        && isBuffered($media.currentTime)
+        && !$media.paused
+        && !$media.ended
+        && $media.readyState > 2;
+    };
+
+    $media.src = {
+      'audio': './data/' + options.title + '/audio.m4a',
+      'video': './data/' + options.title + '/video.mp4'
+    }[type];
+    $media.autoplay = true;
+    $media.controls = true;
+
+    $('.media').append($media);
+
+    mediaHeight = $(type).innerHeight();
+    $content = $('.g-content').css({top: mediaHeight + 25});
+    showNumber = ($content.innerWidth() / $content.innerHeight()) > 1.3 ? 2 : 1;
+    widthScale = $content.innerWidth() / (options.width * showNumber);
+    heightScale = $content.innerHeight() / options.height;
+
+    $media.ontimeupdate = function() {
+      notation.currentTime($media.currentTime);
+      window.cursor.set(playing(), $media.currentTime, 1);
+    };
 
     notation = new Notation({
       scale: widthScale > heightScale ? heightScale : widthScale,
@@ -58,6 +79,7 @@ $(function() {
     });
 
     notation.hasArrow = ko.observable(!isMobile);
+    notation.type = ko.observable(type);
 
     notation.changeSection = function(section) {
       var seekTo;
@@ -66,14 +88,14 @@ $(function() {
 
       if (section.notes && section.notes.length) {
         seekTo = section.notes[0].time + 0.00005;
-        $audio.currentTime = seekTo;
+        $media.currentTime = seekTo;
         notation.currentTime(seekTo);
         window.cursor.set(playing(), seekTo, 1);
-        $audio.pause();
+        $media.pause();
         seekTimer = window.setInterval(function() {
           if (isBuffered(seekTo)) {
             window.clearInterval(seekTimer);
-            $audio.play();
+            $media.play();
           }
         }, 200);
       }
@@ -97,7 +119,7 @@ $(function() {
 
     swiper.on('slideChange', function() {
       if (!isAutoSlide) {
-        $audio.pause();
+        $media.pause();
       }
     });
 
@@ -119,48 +141,43 @@ $(function() {
         }, 200);
       }
     });
-  });
 
-  $audio.ontimeupdate = function() {
-    notation.currentTime($audio.currentTime);
-    window.cursor.set(playing(), $audio.currentTime, 1);
-  };
-
-  //监听页面变化
-  window.addEventListener('orientationchange', function() {
-    window.location.reload();
-  });
-  //防止页面从缓存加载
-  window.addEventListener('pageshow', function(event) {
-    if (event.persisted) {
+    //监听页面变化
+    window.addEventListener('orientationchange', function() {
       window.location.reload();
-    }
-  });
-
-  window.addEventListener('orientationchange', function() {
-    switch (window.orientation) {
-      case -90 || 90:
+    });
+    //防止页面从缓存加载
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
         window.location.reload();
-        break;
-      default:
-        break;
-    }
-  });
-
-  window.addEventListener('resize', function() {
-    var explorer = window.navigator.userAgent.toLowerCase();
-    if (explorer.indexOf('chrome') > 0) {//webkit
-      if (document.body.scrollHeight === window.screen.height && document.body.scrollWidth === window.screen.width) {
-        window.location.reload();
-      } else {
-        console.log('不全屏');
       }
-    } else {//IE 9+  fireFox
-      if (window.outerHeight === window.screen.height && window.outerWidth === window.screen.width) {
-        window.location.reload();
-      } else {
-        console.log('不全屏');
+    });
+
+    window.addEventListener('orientationchange', function() {
+      switch (window.orientation) {
+        case -90 || 90:
+          window.location.reload();
+          break;
+        default:
+          break;
       }
-    }
+    });
+
+    window.addEventListener('resize', function() {
+      var explorer = window.navigator.userAgent.toLowerCase();
+      if (explorer.indexOf('chrome') > 0) {//webkit
+        if (document.body.scrollHeight === window.screen.height && document.body.scrollWidth === window.screen.width) {
+          window.location.reload();
+        } else {
+          console.log('不全屏');
+        }
+      } else {//IE 9+  fireFox
+        if (window.outerHeight === window.screen.height && window.outerWidth === window.screen.width) {
+          window.location.reload();
+        } else {
+          console.log('不全屏');
+        }
+      }
+    });
   });
 });

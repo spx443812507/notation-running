@@ -30,8 +30,6 @@ var Notation = (function() {
     self.notationHeight = ko.observable();
     //乐谱图片
     self.images = ko.observableArray();
-    //音频地址
-    self.audios = ko.observableArray();
     //初始化
     self.init();
   }
@@ -50,19 +48,6 @@ var Notation = (function() {
     self.title(self.options.title);
     self.notationWidth(Math.ceil((self.options.width * self.options.showNumber * self.options.scale)) + 'px');
     self.notationHeight(Math.ceil((self.options.height * self.options.scale)) + 'px');
-
-    self.audios([
-      {
-        src: './data/' + self.options.title + '/audio.m4a',
-        type: 'audio/mp4'
-      }, {
-        src: './data/' + self.options.title + '/audio.ogg',
-        type: 'audio/ogg'
-      }, {
-        src: './data/' + self.options.title + '/audio.mp3',
-        type: 'audio/mpeg'
-      }
-    ]);
 
     if (sections && sections.length) {
       $.each(sections, function(sectionIndex, sectionItem) {
