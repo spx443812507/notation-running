@@ -33,6 +33,14 @@ html, body {
   float: left;
 }
 
+.g-header .youtube {
+  position: absolute;
+  width: 12%;
+  height: auto;
+  right: 0;
+  z-index: 2;
+}
+
 .g-header audio, .g-header video {
   width: 100%;
 }
