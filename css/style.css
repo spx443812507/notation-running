@@ -35,10 +35,37 @@ html, body {
 
 .g-header .youtube {
   position: absolute;
-  width: 12%;
   height: auto;
   right: 0;
   z-index: 2;
+}
+
+.g-header .youtube #player {
+  width: 100%;
+  height: auto;
+}
+
+@media screen and (orientation: portrait) {
+  /*竖屏 css*/
+  .g-header .youtube {
+    width: 100%;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  /*横屏 css*/
+  .g-header .youtube {
+    width: 20%;
+  }
+
+  .handle {
+    background: #ccc;
+    border: 1px solid #000;
+    border-radius: 4px;
+    height: 23px;
+    margin-bottom: -3px;
+    cursor: move;
+  }
 }
 
 .g-header audio, .g-header video {

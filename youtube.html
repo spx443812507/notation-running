@@ -11,9 +11,10 @@
   <link rel="apple-touch-icon" href="icon.png">
   <!-- Place favicon.ico in the root directory -->
 
-  <!-- build:css ./css/style.css -->
+  <!-- build:css ./css/style_youtube.css -->
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/jquery-ui.css">
   <link rel="stylesheet" href="css/swiper.min.css">
   <link rel="stylesheet" href="css/style.css">
   <!-- endbuild -->
@@ -27,7 +28,10 @@
 <!-- Add your site or application content here -->
 <div class="g-container">
   <div class="g-header">
-    <div class="youtube" id="player"></div>
+    <div class="youtube draggable resizable" style="display: none;">
+      <div class="handle"></div>
+      <div id="player"></div>
+    </div>
     <!--<img src="./img/refresh.png" alt="" data-bind="click: refresh"/>-->
   </div>
   <div class="g-content">
@@ -54,14 +58,15 @@
     <div class="swiper-button-prev" data-bind="visible: hasArrow" style="display: none"></div>
   </div>
 </div>
-<!-- build:js ./js/vendor.js -->
+<!-- build:js ./js/vendor_youtube.js -->
 <script src="js/vendor/modernizr-3.5.0.min.js"></script>
 <script src="js/vendor/jquery.min.js"></script>
+<script src="js/vendor/jquery-ui.js"></script>
 <script src="js/vendor/knockout.js"></script>
 <script src="js/vendor/swiper.min.js"></script>
 <!-- endbuild -->
 
-<!-- build:js ./js/app.js -->
+<!-- build:js ./js/app_youtube.js -->
 <script src="js/notation.js"></script>
 <script src="js/plugins.js"></script>
 <script src="js/youtube.js"></script>

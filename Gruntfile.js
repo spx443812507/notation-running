@@ -31,7 +31,24 @@ module.exports = function(grunt) {
               'js/plugins.js',
               'js/main.js'
             ]
-          }]
+          }, {
+            dest: 'dist/js/vendor_youtube.js',
+            src: [
+              'js/vendor/modernizr-3.5.0.min.js',
+              'js/vendor/jquery.min.js',
+              'js/vendor/jquery-ui.js',
+              'js/vendor/knockout.js',
+              'js/vendor/swiper.min.js'
+            ]
+          }, {
+            dest: 'dist/js/app_youtube.js',
+            src: [
+              'js/notation.js',
+              'js/plugins.js',
+              'js/youtube.js'
+            ]
+          }
+        ]
       }
     },
     copy: {
@@ -50,7 +67,7 @@ module.exports = function(grunt) {
           }, {
             expand: true,
             cwd: '',
-            src: ['index.html'],
+            src: ['index.html', 'youtube.html'],
             dest: 'dist'
           }]
       }
@@ -70,7 +87,17 @@ module.exports = function(grunt) {
               'css/style.css'
             ],
             dest: 'dist/css/style.css'
-          }]
+          }, {
+            src: [
+              'css/normalize.css',
+              'css/main.css',
+              'css/swiper.min.css',
+              'css/jquery-ui.css',
+              'css/style.css'
+            ],
+            dest: 'dist/css/style_youtube.css'
+          }
+        ]
       }
     },
     rev: {
@@ -88,7 +115,7 @@ module.exports = function(grunt) {
         }
       },
       js: 'dist/js/*.js',
-      html: ['dist/index.html']
+      html: ['dist/index.html', 'dist/youtube.html']
     },
     usemin: {
       css: {
@@ -97,7 +124,7 @@ module.exports = function(grunt) {
         }
       },
       js: 'dist/js/*.js',
-      html: ['dist/index.html'],
+      html: ['dist/index.html', 'dist/youtube.html'],
       options: {
         assetsDirs: [
           'dist',
