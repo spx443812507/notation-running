@@ -39,7 +39,6 @@ function onYouTubePlayerAPIReady() {
       notation,
       seekTimer,
       $content,
-      $container,
       showNumber,
       widthScale,
       heightScale;
@@ -52,22 +51,19 @@ function onYouTubePlayerAPIReady() {
       return $media && $media.getPlayerState() === 1;
     };
 
-    $container = $('.g-container');
-    showNumber = ($container.innerWidth() / $container.innerHeight()) > 1.3 ? 2 : 1;
-
-    if (showNumber === 2) {
-      $content = $('.g-content').css({top: 0});
-
-      $('.draggable').show().draggable({
-        iframeFix: true
-      });
-    } else {
-      $('.draggable').show();
-      $content = $('.g-content').css({top: $('#player').innerHeight() + 25});
-    }
-
+    $content = $('.g-content').css({top: 0});
+    showNumber = ($content.innerWidth() / $content.innerHeight()) > 1.3 ? 2 : 1;
     widthScale = $content.innerWidth() / (options.width * showNumber);
     heightScale = $content.innerHeight() / options.height;
+
+    $('.draggable').show().draggable({
+      iframeFix: true
+    });
+
+    $('.tool-bar-toggle').on('click', function() {
+      $(this).toggleClass('active');
+      $('.tool-bar-menu').slideToggle();
+    });
 
     window.setInterval(function() {
       notation.currentTime($media.getCurrentTime());

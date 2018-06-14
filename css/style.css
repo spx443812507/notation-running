@@ -40,6 +40,10 @@ html, body {
   z-index: 2;
 }
 
+.g-header .youtube iframe {
+  pointer-events: none;
+}
+
 .g-header .youtube #player {
   width: 100%;
   height: auto;
@@ -56,15 +60,6 @@ html, body {
   /*横屏 css*/
   .g-header .youtube {
     width: 20%;
-  }
-
-  .handle {
-    background: #ccc;
-    border: 1px solid #000;
-    border-radius: 4px;
-    height: 23px;
-    margin-bottom: -3px;
-    cursor: move;
   }
 }
 
@@ -132,3 +127,59 @@ html, body {
   background-color: #EE0000;
   z-index: 2;
 }
+
+.tool-bar {
+  position: fixed;
+  right: 5%;
+  bottom: 5%;
+  z-index: 1;
+}
+
+.tool-bar-menu {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.tool-bar li {
+  padding: 5px 0;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  vertical-align: middle;
+  border: none;
+  background-color: inherit;
+}
+
+.icon-back {
+  background-image: url(../img/back_32_b.png);
+}
+
+.icon-refresh {
+  background-image: url(../img/refresh_32.png);
+}
+
+.icon-play {
+  background-image: url(../img/play-arrow_32_b.png);
+}
+
+.icon-visible {
+  background-image: url(../img/youtube-logo_32_b.png);
+}
+
+.icon-visible.active {
+  background-image: url(../img/youtube-logo_32_r.png);
+}
+
+.icon-toggle {
+  margin-top: 5px;
+  background-image: url(../img/equalizer_32_b.png);
+}
+
+.icon-toggle.active {
+  background-image: url(../img/equalizer_32_r.png);
+}
+

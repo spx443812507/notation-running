@@ -29,7 +29,6 @@
 <div class="g-container">
   <div class="g-header">
     <div class="youtube draggable resizable" style="display: none;">
-      <div class="handle"></div>
       <div id="player"></div>
     </div>
     <!--<img src="./img/refresh.png" alt="" data-bind="click: refresh"/>-->
@@ -56,6 +55,23 @@
     </div>
     <div class="swiper-button-next" data-bind="visible: hasArrow" style="display: none"></div>
     <div class="swiper-button-prev" data-bind="visible: hasArrow" style="display: none"></div>
+  </div>
+  <div class="tool-bar">
+    <ul class="tool-bar-menu" style="display: none;">
+      <li>
+        <button class="icon icon-back"></button>
+      </li>
+      <li>
+        <button class="icon icon-refresh"></button>
+      </li>
+      <li>
+        <button class="icon icon-play"></button>
+      </li>
+      <li>
+        <button class="icon icon-visible"></button>
+      </li>
+    </ul>
+    <button class="tool-bar-toggle icon icon-toggle"></button>
   </div>
 </div>
 <!-- build:js ./js/vendor_youtube.js -->
