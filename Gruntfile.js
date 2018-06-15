@@ -37,6 +37,7 @@ module.exports = function(grunt) {
               'js/vendor/modernizr-3.5.0.min.js',
               'js/vendor/jquery.min.js',
               'js/vendor/jquery-ui.js',
+              'js/vendor/jquery.ui.touch-punch.min.js',
               'js/vendor/knockout.js',
               'js/vendor/swiper.min.js'
             ]

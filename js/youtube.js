@@ -20,6 +20,14 @@ $.queryString = function(name, url) {
 };
 
 function onYouTubePlayerAPIReady() {
+  var isBuffered = function(currentTime) {
+    return $media.getVideoLoadedFraction() >= currentTime / $media.getDuration();
+  };
+
+  var playing = function() {
+    return $media && $media.getPlayerState() === 1;
+  };
+
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
     $media = new YT.Player('player', {
       height: '180',
@@ -28,6 +36,13 @@ function onYouTubePlayerAPIReady() {
       events: {
         'onReady': function() {
           onPlayerReady(options);
+        },
+        'onStateChange': function() {
+          console.log(playing());
+          if (playing()) {
+            $('iframe').addClass('playing');
+            $('#player').slideToggle();
+          }
         }
       }
     });
@@ -42,14 +57,6 @@ function onYouTubePlayerAPIReady() {
       showNumber,
       widthScale,
       heightScale;
-
-    var isBuffered = function(currentTime) {
-      return $media.getVideoLoadedFraction() >= currentTime / $media.getDuration();
-    };
-
-    var playing = function() {
-      return $media && $media.getPlayerState() === 1;
-    };
 
     $content = $('.g-content').css({top: 0});
     showNumber = ($content.innerWidth() / $content.innerHeight()) > 1.3 ? 2 : 1;
@@ -82,6 +89,7 @@ function onYouTubePlayerAPIReady() {
     });
 
     $('.icon-visible').on('click', function() {
+      $(this).toggleClass('active');
       $('#player').toggle();
     });
 

@@ -35,12 +35,13 @@ html, body {
 
 .g-header .youtube {
   position: absolute;
+  width: 320px;
   height: auto;
   right: 0;
   z-index: 2;
 }
 
-.g-header .youtube iframe {
+.g-header .youtube iframe.playing {
   pointer-events: none;
 }
 
@@ -143,6 +144,7 @@ html, body {
   border: none;
   background-color: inherit;
   background-size: 32px 32px;
+  background-repeat: no-repeat;
 }
 
 .icon-back {
@@ -171,20 +173,6 @@ html, body {
 
 .icon-toggle.active {
   background-image: url(../img/equalizer_32_r.png);
-}
-
-@media screen and (orientation: portrait) {
-  /*竖屏 css*/
-  .g-header .youtube {
-    width: 100%;
-  }
-}
-
-@media screen and (orientation: landscape) {
-  /*横屏 css*/
-  .g-header .youtube {
-    width: 20%;
-  }
 }
 
 @media screen and (max-width: 320px) {
