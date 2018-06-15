@@ -22,8 +22,8 @@ $.queryString = function(name, url) {
 function onYouTubePlayerAPIReady() {
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
     $media = new YT.Player('player', {
-      height: '390',
-      width: '640',
+      height: '180',
+      width: '320',
       videoId: options.videoId,
       events: {
         'onReady': function() {
@@ -63,6 +63,26 @@ function onYouTubePlayerAPIReady() {
     $('.tool-bar-toggle').on('click', function() {
       $(this).toggleClass('active');
       $('.tool-bar-menu').slideToggle();
+    });
+
+    $('.icon-back').on('click', function() {
+      window.history.go(-1);
+    });
+
+    $('.icon-refresh').on('click', function() {
+      window.location.reload();
+    });
+
+    $('.icon-play').on('click', function() {
+      if ($media.getPlayerState() === 1) {
+        $media.pauseVideo();
+      } else {
+        $media.playVideo();
+      }
+    });
+
+    $('.icon-visible').on('click', function() {
+      $('#player').toggle();
     });
 
     window.setInterval(function() {

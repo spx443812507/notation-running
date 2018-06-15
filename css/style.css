@@ -49,20 +49,6 @@ html, body {
   height: auto;
 }
 
-@media screen and (orientation: portrait) {
-  /*竖屏 css*/
-  .g-header .youtube {
-    width: 100%;
-  }
-}
-
-@media screen and (orientation: landscape) {
-  /*横屏 css*/
-  .g-header .youtube {
-    width: 20%;
-  }
-}
-
 .g-header audio, .g-header video {
   width: 100%;
 }
@@ -141,6 +127,10 @@ html, body {
   list-style-type: none;
 }
 
+.tool-bar .icon-toggle {
+  margin-top: 5px;
+}
+
 .tool-bar li {
   padding: 5px 0;
 }
@@ -152,6 +142,7 @@ html, body {
   vertical-align: middle;
   border: none;
   background-color: inherit;
+  background-size: 32px 32px;
 }
 
 .icon-back {
@@ -175,7 +166,6 @@ html, body {
 }
 
 .icon-toggle {
-  margin-top: 5px;
   background-image: url(../img/equalizer_32_b.png);
 }
 
@@ -183,3 +173,40 @@ html, body {
   background-image: url(../img/equalizer_32_r.png);
 }
 
+@media screen and (orientation: portrait) {
+  /*竖屏 css*/
+  .g-header .youtube {
+    width: 100%;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  /*横屏 css*/
+  .g-header .youtube {
+    width: 20%;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .icon {
+    width: 10px;
+    height: 10px;
+    background-size: 10px 10px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 768px) {
+  .icon {
+    width: 14px;
+    height: 14px;
+    background-size: 14px 14px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1200px) {
+  .icon {
+    width: 24px;
+    height: 24px;
+    background-size: 24px 24px;
+  }
+}
