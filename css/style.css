@@ -27,29 +27,6 @@ html, body {
   width: 100%;
 }
 
-.g-header .media {
-  display: inline;
-  width: 100%;
-  float: left;
-}
-
-.g-header .youtube {
-  position: absolute;
-  width: 320px;
-  height: auto;
-  right: 0;
-  z-index: 2;
-}
-
-.g-header .youtube iframe.playing {
-  pointer-events: none;
-}
-
-.g-header .youtube #player {
-  width: 100%;
-  height: auto;
-}
-
 .g-header audio, .g-header video {
   width: 100%;
 }
@@ -113,6 +90,32 @@ html, body {
   height: 100%;
   background-color: #EE0000;
   z-index: 2;
+}
+
+.youtube {
+  position: absolute;
+  width: 320px;
+  height: auto;
+  z-index: 2;
+}
+
+.youtube.right-top {
+  right: 0;
+  top: 0;
+}
+
+.youtube.left-bottom {
+  left: 0;
+  bottom: 0;
+}
+
+.youtube iframe.playing {
+  pointer-events: none;
+}
+
+.youtube #player {
+  width: 100%;
+  height: auto;
 }
 
 .tool-bar {

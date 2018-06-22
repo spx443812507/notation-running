@@ -3,6 +3,7 @@ tag.src = 'http://www.youtube.com/player_api';
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var $media;
+isMobile = !!navigator.userAgent.match(/(iPhone|iPod|iPad|Android|ios)/i);
 
 //获取url中指定参数名的值
 $.queryString = function(name, url) {
@@ -27,6 +28,8 @@ function onYouTubePlayerAPIReady() {
   var playing = function() {
     return $media && $media.getPlayerState() === 1;
   };
+
+  $('.youtube').addClass(isMobile ? 'left-bottom' : 'right-top');
 
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
     var isPlayed = false;
@@ -62,8 +65,7 @@ function onYouTubePlayerAPIReady() {
   });
 
   function onPlayerReady(options) {
-    var isMobile = !!navigator.userAgent.match(/(iPhone|iPod|iPad|Android|ios)/i),
-      isAutoSlide = false,
+    var isAutoSlide = false,
       notation,
       seekTimer,
       $content,
