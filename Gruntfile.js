@@ -68,7 +68,7 @@ module.exports = function(grunt) {
           }, {
             expand: true,
             cwd: '',
-            src: ['index.html', 'youtube.html'],
+            src: ['index.html', 'tm.html'],
             dest: 'dist'
           }]
       }
@@ -116,7 +116,7 @@ module.exports = function(grunt) {
         }
       },
       js: 'dist/js/*.js',
-      html: ['dist/index.html', 'dist/youtube.html']
+      html: ['dist/index.html', 'dist/tm.html']
     },
     usemin: {
       css: {
@@ -125,7 +125,7 @@ module.exports = function(grunt) {
         }
       },
       js: 'dist/js/*.js',
-      html: ['dist/index.html', 'dist/youtube.html'],
+      html: ['dist/index.html', 'dist/tm.html'],
       options: {
         assetsDirs: [
           'dist',

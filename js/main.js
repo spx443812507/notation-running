@@ -15,7 +15,7 @@ $(function() {
   };
 
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
-    var isMobile = !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i),
+    var isMobile = !!navigator.userAgent.match(/(iPhone|iPod|iPad|Android|ios)/i),
       type = $.queryString('type') || 'audio',
       isAutoSlide = false,
       $media = document.createElement(type),
