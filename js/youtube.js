@@ -29,14 +29,14 @@ function onYouTubePlayerAPIReady() {
     return $media && $media.getPlayerState() === 1;
   };
 
-  $('.youtube').addClass(isMobile ? 'left-bottom' : 'right-top');
+  $('.youtube').addClass(!!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i) ? 'left-bottom' : 'right-top');
 
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
     var isPlayed = false;
 
     $media = new YT.Player('player', {
       height: '180',
-      width: '320',
+      width: '270',
       videoId: options.videoId,
       playerVars: {
         playsinline: 1
