@@ -35,20 +35,26 @@ function onYouTubePlayerAPIReady() {
       height: '180',
       width: '320',
       videoId: options.videoId,
+      playerVars: {
+        playsinline: 1
+      },
       events: {
         'onReady': function() {
           onPlayerReady(options);
         },
         'onStateChange': function() {
           if (playing()) {
+            //第一次手动播放后自动隐藏播放器并且设置可以拖动的样式
             if (!isPlayed) {
               isPlayed = true;
               $('iframe').addClass('playing');
               $('#player').slideToggle();
             }
             $('.icon-play').addClass('active');
+            $('.tool-bar-toggle').addClass('active');
           } else {
             $('.icon-play').removeClass('active');
+            $('.tool-bar-toggle').removeClass('active');
           }
         }
       }
@@ -56,7 +62,7 @@ function onYouTubePlayerAPIReady() {
   });
 
   function onPlayerReady(options) {
-    var isMobile = !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i),
+    var isMobile = !!navigator.userAgent.match(/(iPhone|iPod|iPad|Android|ios)/i),
       isAutoSlide = false,
       notation,
       seekTimer,
@@ -75,7 +81,6 @@ function onYouTubePlayerAPIReady() {
     });
 
     $('.tool-bar-toggle').on('click', function() {
-      $(this).toggleClass('active');
       $('.tool-bar-menu').slideToggle();
     });
 
