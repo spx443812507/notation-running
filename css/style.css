@@ -159,6 +159,10 @@ html, body {
   background-image: url(../img/play-arrow_32_b.png);
 }
 
+.icon-play.active {
+  background-image: url(../img/pause_32_b.png);
+}
+
 .icon-visible {
   background-image: url(../img/youtube-logo_32_b.png);
 }

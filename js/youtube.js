@@ -29,6 +29,8 @@ function onYouTubePlayerAPIReady() {
   };
 
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
+    var isPlayed = false;
+
     $media = new YT.Player('player', {
       height: '180',
       width: '320',
@@ -38,10 +40,15 @@ function onYouTubePlayerAPIReady() {
           onPlayerReady(options);
         },
         'onStateChange': function() {
-          console.log(playing());
           if (playing()) {
-            $('iframe').addClass('playing');
-            $('#player').slideToggle();
+            if (!isPlayed) {
+              isPlayed = true;
+              $('iframe').addClass('playing');
+              $('#player').slideToggle();
+            }
+            $('.icon-play').addClass('active');
+          } else {
+            $('.icon-play').removeClass('active');
           }
         }
       }
