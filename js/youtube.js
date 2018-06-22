@@ -31,6 +31,10 @@ function onYouTubePlayerAPIReady() {
 
   $('.youtube').addClass(!!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i) ? 'left-bottom' : 'right-top');
 
+  if ($.queryString('debug')) {
+    $('.note').addClass('active');
+  }
+
   $.getJSON('./data/' + $.queryString('notation') + '/data.json').then(function(options) {
     var isPlayed = false;
 
@@ -52,6 +56,7 @@ function onYouTubePlayerAPIReady() {
               isPlayed = true;
               $('iframe').addClass('playing');
               $('#player').slideToggle();
+              $('.tool-bar-menu').slideToggle();
             }
             $('.icon-play').addClass('active');
             $('.tool-bar-toggle').addClass('active');

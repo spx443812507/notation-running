@@ -46,8 +46,8 @@ var Notation = (function() {
       notations = [];
 
     self.title(self.options.title);
-    self.notationWidth(Math.ceil((self.options.width * self.options.showNumber * self.options.scale)) + 'px');
-    self.notationHeight(Math.ceil((self.options.height * self.options.scale)) + 'px');
+    self.notationWidth(Math.ceil(self.options.width * self.options.showNumber * self.options.scale) + 5 + 'px');
+    self.notationHeight(Math.ceil(self.options.height * self.options.scale) + 5 + 'px');
 
     if (sections && sections.length) {
       $.each(sections, function(sectionIndex, sectionItem) {

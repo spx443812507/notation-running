@@ -80,7 +80,7 @@ html, body {
   z-index: 2;
 }
 
-.note {
+.note.active {
   background-color: #af0a0d;
   opacity: .1;
 }
