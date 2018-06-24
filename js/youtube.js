@@ -57,6 +57,7 @@ function onYouTubePlayerAPIReady() {
               $('iframe').addClass('playing');
               $('#player').slideToggle();
               $('.tool-bar-menu').slideToggle();
+              $('.icon-visible').removeClass('active');
             }
             $('.icon-play').addClass('active');
             $('.tool-bar-toggle').addClass('active');
@@ -83,9 +84,7 @@ function onYouTubePlayerAPIReady() {
     widthScale = $content.innerWidth() / (options.width * showNumber);
     heightScale = $content.innerHeight() / options.height;
 
-    $('.draggable').show().draggable({
-      iframeFix: true
-    });
+    $('.draggable').show().draggable();
 
     $('.tool-bar-toggle').on('click', function() {
       $('.tool-bar-menu').slideToggle();
