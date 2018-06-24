@@ -39,7 +39,7 @@ function onYouTubePlayerAPIReady() {
     var isPlayed = false;
 
     $media = new YT.Player('player', {
-      height: '180',
+      height: '150',
       width: '270',
       videoId: options.videoId,
       playerVars: {

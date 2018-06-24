@@ -44,7 +44,7 @@ html, body {
   align-items: center;
   width: 100%;
   bottom: 0;
-  overflow: auto;
+  overflow: hidden;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -94,8 +94,8 @@ html, body {
 
 .youtube {
   position: absolute;
-  width: 320px;
-  height: auto;
+  width: 270px;
+  height: 150px;
   z-index: 2;
 }
 
