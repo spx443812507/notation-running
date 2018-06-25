@@ -39,8 +39,8 @@ function onYouTubePlayerAPIReady() {
     var isPlayed = false;
 
     $media = new YT.Player('player', {
-      height: '150',
-      width: '270',
+      height: '135',
+      width: '240',
       videoId: options.videoId,
       playerVars: {
         playsinline: 1
@@ -55,9 +55,12 @@ function onYouTubePlayerAPIReady() {
             if (!isPlayed) {
               isPlayed = true;
               $('iframe').addClass('playing');
-              $('#player').slideToggle();
-              $('.tool-bar-menu').slideToggle();
-              $('.icon-visible').removeClass('active');
+
+              if ($('.youtube').is(':visible')) {
+                $('.youtube').slideUp();
+                $('.tool-bar-menu').slideDown();
+                $('.icon-visible').removeClass('active');
+              }
             }
             $('.icon-play').addClass('active');
             $('.tool-bar-toggle').addClass('active');
@@ -108,7 +111,7 @@ function onYouTubePlayerAPIReady() {
 
     $('.icon-visible').on('click', function() {
       $(this).toggleClass('active');
-      $('#player').toggle();
+      $('.youtube').toggle();
     });
 
     window.setInterval(function() {

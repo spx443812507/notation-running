@@ -94,8 +94,8 @@ html, body {
 
 .youtube {
   position: absolute;
-  width: 270px;
-  height: 150px;
+  width: 240px;
+  height: 135px;
   z-index: 2;
 }
 
