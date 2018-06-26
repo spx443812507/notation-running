@@ -26,7 +26,7 @@ function onYouTubePlayerAPIReady() {
   };
 
   var playing = function() {
-    return $media && $media.getPlayerState() === 1;
+    return $media && ($media.getPlayerState() === 1 || $media.getPlayerState() === 3);
   };
 
   $('.youtube').addClass(!!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i) ? 'left-bottom' : 'right-top');
